@@ -1,5 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Phone, Clock, Star } from "lucide-react";
+import { InstagramIcon } from "@/components/ui/InstagramIcon";
 import { business } from "@/lib/business";
 
 export function Footer() {
@@ -7,9 +9,15 @@ export function Footer() {
     <footer className="mt-20 border-t border-tape bg-ink text-paper">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4 md:px-6">
         <div>
-          <p className="font-display text-2xl">
-            Malhar<span className="text-orange">.</span>
-          </p>
+          <div className="inline-block rounded-2xl bg-white p-2">
+            <Image
+              src="/logo.png"
+              alt="Malhar Sports and Shoes"
+              width={56}
+              height={56}
+              className="h-14 w-14"
+            />
+          </div>
           <p className="mt-3 max-w-xs text-sm text-paper/70">
             Indore ka sports adda — jaha sirf saman nahi milta, sahi salaah
             bhi milti hai.
@@ -21,6 +29,17 @@ export function Footer() {
               ({business.rating.count} Google reviews)
             </span>
           </div>
+          {business.social.instagram && (
+            <a
+              href={business.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-1.5 text-sm text-paper/80 hover:text-orange"
+            >
+              <InstagramIcon className="h-4 w-4" />
+              @malhar_sports_and_shoes_
+            </a>
+          )}
         </div>
 
         <div>

@@ -50,6 +50,11 @@ export const metadata: Metadata = {
     siteName: "Malhar Sports and Shoes",
     locale: "en_IN",
     type: "website",
+    images: [{ url: "/logo.png", width: 500, height: 500 }],
+  },
+  icons: {
+    icon: "/favicon-32.png",
+    apple: "/apple-touch-icon.png",
   },
   twitter: {
     card: "summary_large_image",

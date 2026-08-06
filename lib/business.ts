@@ -45,7 +45,7 @@ export const business = {
   domain: "malharsportsandshoes.in",
   siteUrl: "https://malharsportsandshoes.in",
   social: {
-    instagram: "", // add handle when available
+    instagram: "https://www.instagram.com/malhar_sports_and_shoes_/",
     facebook: "",
   },
 } as const;

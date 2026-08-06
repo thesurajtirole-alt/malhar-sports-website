@@ -1,30 +1,58 @@
 # Malhar Sports and Shoes — Website
 
-Indore ka sports adda. Built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, and Framer Motion.
+Indore ka sports adda. Built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, Framer Motion, and MDX.
 
-## What's built so far (Slice 1: Foundation + Homepage)
+Live at: https://malhar-sports-website.vercel.app (connect `malharsportsandshoes.in` per the domain guide you already have)
 
-- **Design system** — `app/globals.css` holds every color/font/radius token. Palette: Court Orange `#FF6A1A`, Stadium Black `#0E0F10`, Turf Green `#1C8A4B`, Chalk White, Tape Gray. Display font is **Anton** (condensed, jersey-numeral energy), body is **Plus Jakarta Sans**, and a monospace (**JetBrains Mono**) powers the scoreboard ticker.
-- **Real business data** — `lib/business.ts` is the single source of truth for address, phone, WhatsApp, hours, and rating. Everything (schema, footer, nav CTA, WhatsApp button) reads from here — update once, it propagates everywhere.
-- **SEO/schema** — `lib/schema.ts` generates `SportingGoodsStore` LocalBusiness JSON-LD with your real NAP (name/address/phone), hours, and aggregate rating, injected in `app/layout.tsx`. Metadata (title/description/OG/Twitter) is also wired with your target keywords (sports shop Indore, running shoes Indore, etc.)
-- **Layout** — Sticky Navbar (mobile menu included), Footer with real address/hours/map link, floating WhatsApp CTA button (pre-filled message).
-- **Homepage**
-  - **Hero** — "Bhai... Aaj Kis Sport Ka Mood Hai?" with a working 6-sport picker (Cricket/Football/Badminton/Running/Gym/School) that swaps the line and category chips live.
-  - **Matchday Ticker** — signature scoreboard-style scrolling strip (rating, sports covered, address, hours) — this is the page's one distinctive motif, used sparingly.
-  - **Sports Personality teaser** — links out to the quiz (not yet built).
-  - **Khelo Aaj (Daily Challenge)** strip — 3 cards linking to games (not yet built).
-- **404 page** — "Lagta Hai Ball Boundary Ke Bahar Chali Gayi 😅" per the brief's microinteraction spec.
+## What's built (Slice 2 — full site)
 
-## Not yet built (next slices)
+### Foundation
+- **Design system** — `app/globals.css`. Palette: Court Orange `#FF6A1A`, Stadium Black `#0E0F10`, Turf Green `#1C8A4B`. Fonts: Anton (display), Plus Jakarta Sans (body), JetBrains Mono (scoreboard/ticker).
+- **Real business data** — `lib/business.ts` is the single source of truth (address, phone, WhatsApp, hours, rating). Everything reads from here.
+- **SEO/schema** — `lib/schema.ts` generates `SportingGoodsStore` LocalBusiness JSON-LD, plus per-article `Article` and `FAQPage` schema (auto-extracted from each MDX file's FAQ section).
+- **Gamification** — `lib/gamification.ts`: points, badges, and daily streaks, all via `localStorage`. No auth, no backend.
 
-This is a large spec — the rest is intentionally sequenced so each piece is done properly rather than stubbed:
-- Sports Personality Quiz, Daily Challenge, Guess the Player/Shoe/Logo, calculators (BMI/Running/Water)
-- Blog/MDX system + sample articles
-- Sports Hub category pages
-- Indore academies/grounds/events directory (+ map)
-- Gamification (points/badges via localStorage)
-- Dark mode toggle (tokens are ready, toggle UI isn't wired yet)
-- Real photos/logo (currently no images used — add yours to `/public`)
+### Pages
+| Route | What it is |
+|---|---|
+| `/` | Homepage — hero sport-picker, Matchday Ticker, quiz teaser, daily challenge teaser |
+| `/sports-hub` | Category directory — links every sport to its guides/tools/games |
+| `/khelo` | Games & calculators index |
+| `/khelo/sports-personality` | Interactive 4-question quiz → personality result → badge unlock → WhatsApp share |
+| `/khelo/aaj-ka-challenge` | Daily quiz question (rotates by date), streak tracking |
+| `/khelo/guess-the-player` | Progressive-clue guessing game (rotates daily) |
+| `/khelo/sports-fact` | Sports Fact of the Day (rotates daily) |
+| `/khelo/calculators/bmi` | BMI calculator (general indicator only, no diet/exercise prescriptions) |
+| `/khelo/calculators/running` | Pace → 5K/10K/HM/FM time calculator |
+| `/khelo/calculators/water-intake` | Water intake calculator by weight + activity |
+| `/blog` | Article listing |
+| `/blog/[slug]` | MDX article renderer — Article + FAQ schema injected automatically |
+| `/indore/academies` | Real Indore grounds/stadiums/academies directory (Nehru Stadium, Holkar Stadium, Abhay Prashal, ICC, MPCA, Indore Badminton Academy) |
+| `/about` | Store story |
+| `/store` | Address, hours, phone, WhatsApp, embedded Google Map |
+| 404 | "Lagta Hai Ball Boundary Ke Bahar Chali Gayi 😅" |
+
+### Blog / MDX system
+- Articles live in `content/blog/*.mdx` with frontmatter (`title`, `description`, `category`, `date`, `readingMinutes`).
+- Follows the brief's article format: Question → Quick Answer → Detailed Guide → Mistakes → Expert Tip → FAQs → Related → Visit Store CTA.
+- Two real articles included: running shoes buying guide, cricket bat sizing guide.
+- **To add a new article:** drop a new `.mdx` file in `content/blog/` with the same frontmatter shape — it's picked up automatically, no code changes needed.
+
+### "Daily" content, no backend
+`lib/daily-content.ts` picks today's quiz question / player / fact deterministically from the date, so every visitor sees the same "today's challenge" without a database. Content pools currently have ~5 items each — add more entries to `guessThePlayerPool`, `sportsFactPool`, `dailyChallengePool` to extend the rotation.
+
+## Not yet built
+- Guess the Shoe / Guess the Logo, Sports Memory Game, Crossword, Word Hunt, Build Your Dream Kit, Sports Poll (spec lists these; the core game *pattern* is now established in `components/interactive/` if you want more built the same way)
+- Events calendar, school sports calendar
+- Dark mode toggle (tokens exist in `globals.css`, toggle UI not wired)
+- Real photos/logo — none used yet, nothing broken, just no images in `/public`
+
+## Before going live — action items
+1. **Verify the Indore academies directory** (`lib/indore-venues.ts`) — this was built from public search results (Justdial, Wikipedia, academy sites), not your own confirmed contacts. Addresses/phone numbers for third-party academies are not guaranteed current. Update or remove entries you can't verify before publishing, and note the reviews/rating count in `lib/business.ts` may drift — recheck it periodically.
+2. Add real photos/logo to `/public`.
+3. Replace placeholder `geo.lat`/`geo.lng` in `lib/business.ts` with your exact Google Business Profile pin.
+4. Add Google Analytics / Search Console / Microsoft Clarity IDs once ready.
+5. Write more blog articles as MDX files — the system scales without touching code.
 
 ## Running locally
 
@@ -33,13 +61,4 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000
-
-**Note:** `next/font/google` needs internet access to fetch Anton, Plus Jakarta Sans, and JetBrains Mono at build time. This works normally on your machine and on Vercel — it only failed in the sandboxed environment I built this in (which whitelists just a few domains). No action needed on your end.
-
-## Before going live
-
-1. Add real photos (store front, interior, shelves) to `/public` — currently images are used nowhere so there's nothing broken, but the design wants them.
-2. Replace the placeholder `geo.lat`/`geo.lng` in `lib/business.ts` with your exact Google Business Profile pin (for map accuracy).
-3. Buy `malharsportsandshoes.in` from a registrar (GoDaddy/BigRock/Namecheap — a `.in` domain itself isn't free, roughly ₹500–800/year, but hosting on **Vercel is free** for this traffic level).
-4. Add Google Analytics, Search Console verification, and Microsoft Clarity IDs once the domain is live.
+**Note on fonts:** `next/font/google` needs normal internet access at build time — works fine on your machine and on Vercel. It only fails in the sandboxed environment I build in here (limited domain allowlist); already verified the rest of the app compiles cleanly.

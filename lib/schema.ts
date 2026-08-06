@@ -5,7 +5,7 @@ export function getLocalBusinessSchema() {
     "@context": "https://schema.org",
     "@type": "SportingGoodsStore",
     name: business.name,
-    image: `${business.siteUrl}/og-image.jpg`,
+    image: `${business.siteUrl}/logo.png`,
     "@id": business.siteUrl,
     url: business.siteUrl,
     telephone: business.phone,

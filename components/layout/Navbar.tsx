@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
+import { InstagramIcon } from "@/components/ui/InstagramIcon";
 import { business } from "@/lib/business";
 import { cn } from "@/lib/utils";
 
@@ -10,7 +12,7 @@ const navLinks = [
   { href: "/sports-hub", label: "Sports Hub" },
   { href: "/khelo", label: "Khelo 🎮" },
   { href: "/blog", label: "Gyaan" },
-  { href: "/indore", label: "Indore Sports" },
+  { href: "/indore/academies", label: "Indore Sports" },
   { href: "/store", label: "Visit Store" },
 ];
 
@@ -21,9 +23,14 @@ export function Navbar() {
     <header className="sticky top-0 z-40 border-b border-tape bg-paper/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="font-display text-xl tracking-wide text-ink">
-            Malhar<span className="text-orange">.</span>
-          </span>
+          <Image
+            src="/logo.png"
+            alt="Malhar Sports and Shoes"
+            width={40}
+            height={40}
+            className="h-10 w-10"
+            priority
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
@@ -39,6 +46,17 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
+          {business.social.instagram && (
+            <a
+              href={business.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Malhar Sports Instagram"
+              className="text-ink/70 hover:text-orange"
+            >
+              <InstagramIcon className="h-5 w-5" />
+            </a>
+          )}
           <a
             href={business.telLink}
             className="flex items-center gap-1.5 text-sm font-medium text-ink/80 hover:text-orange"
