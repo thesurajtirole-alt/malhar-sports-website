@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { PersonalityQuiz } from "@/components/interactive/PersonalityQuiz";
+import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
+import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
   title: "Tu Kaunsa Sports Player Hai? — Sports Personality Quiz",
@@ -10,7 +12,10 @@ export const metadata: Metadata = {
 
 export default function SportsPersonalityPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16 md:px-6">
+    <div className="relative overflow-hidden">
+      <BackgroundEffects variant="dots" grain={false} />
+      <div className="relative mx-auto max-w-2xl px-4 py-16 md:px-6">
+        <RevealOnScroll>
       <p className="mb-2 text-center text-sm font-semibold uppercase tracking-wide text-orange">
         2-Minute Quiz
       </p>
@@ -22,6 +27,8 @@ export default function SportsPersonalityPage() {
       </p>
       <div className="mt-10">
         <PersonalityQuiz />
+      </div>
+        </RevealOnScroll>
       </div>
     </div>
   );

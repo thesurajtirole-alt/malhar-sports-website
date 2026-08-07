@@ -2,11 +2,14 @@ import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Clock, Star } from "lucide-react";
 import { InstagramIcon } from "@/components/ui/InstagramIcon";
+import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
 import { business } from "@/lib/business";
 
 export function Footer() {
   return (
-    <footer className="mt-20 border-t border-tape bg-ink text-paper">
+    <footer className="relative mt-20 overflow-hidden bg-ink text-paper">
+      <BackgroundEffects variant="aurora-soft" />
+      <div className="relative">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-4 md:px-6">
         <div>
           <div className="inline-block rounded-2xl bg-white p-2">
@@ -114,6 +117,7 @@ export function Footer() {
       <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-paper/50 md:px-6">
         © {new Date().getFullYear()} Malhar Sports and Shoes, Indore. Sab
         rights reserved. Made with ❤️ for Indore.
+      </div>
       </div>
     </footer>
   );

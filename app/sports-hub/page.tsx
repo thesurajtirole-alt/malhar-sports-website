@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
+import { RevealOnScroll, StaggerGroup, StaggerItem } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
   title: "Sports Hub — Cricket, Football, Badminton, Running, Gym",
@@ -72,35 +74,43 @@ const categories = [
 
 export default function SportsHubPage() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-16 md:px-6">
-      <h1 className="text-center font-display text-4xl md:text-5xl">
-        Sports Hub
-      </h1>
-      <p className="mx-auto mt-3 max-w-md text-center text-ink/70">
-        Apna sport choose karo — guides, tools, aur games sab yaha milega.
-      </p>
+    <div className="relative overflow-hidden">
+      <BackgroundEffects variant="conic-soft" />
+      <div className="relative mx-auto max-w-5xl px-4 py-16 md:px-6">
+        <RevealOnScroll>
+          <h1 className="text-center font-display text-4xl md:text-5xl">
+            Sports Hub
+          </h1>
+          <p className="mx-auto mt-3 max-w-md text-center text-ink/70">
+            Apna sport choose karo — guides, tools, aur games sab yaha milega.
+          </p>
+        </RevealOnScroll>
 
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {categories.map((cat) => (
-          <div key={cat.key} className="rounded-card border border-tape p-6">
-            <span className="text-3xl">{cat.emoji}</span>
-            <h2 className="mt-3 font-display text-xl normal-case tracking-normal">
-              {cat.title}
-            </h2>
-            <p className="mt-1 text-sm text-ink/60">{cat.desc}</p>
-            <div className="mt-4 space-y-2">
-              {cat.links.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="block text-sm font-semibold text-orange hover:underline"
-                >
-                  {link.label} →
-                </Link>
-              ))}
-            </div>
-          </div>
-        ))}
+        <StaggerGroup className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {categories.map((cat) => (
+            <StaggerItem key={cat.key}>
+              <div className="rounded-card border border-tape bg-paper p-6 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-orange/10">
+                <span className="text-3xl">{cat.emoji}</span>
+                <h2 className="mt-3 font-display text-xl normal-case tracking-normal">
+                  {cat.title}
+                </h2>
+                <p className="mt-1 text-sm text-ink/60">{cat.desc}</p>
+                <div className="mt-4 space-y-2">
+                  {cat.links.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      data-cursor="Explore →"
+                      className="block text-sm font-semibold text-orange hover:underline"
+                    >
+                      {link.label} →
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </StaggerItem>
+          ))}
+        </StaggerGroup>
       </div>
     </div>
   );

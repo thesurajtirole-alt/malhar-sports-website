@@ -128,6 +128,14 @@ html.custom-cursor-active button {
     radial-gradient(circle at 50% 90%, rgba(255, 106, 26, 0.15), transparent 50%);
 }
 
+/* Same aurora, much lower alpha — for use on white/light sections */
+.bg-aurora-soft {
+  background-image:
+    radial-gradient(circle at 10% 10%, rgba(255, 106, 26, 0.09), transparent 45%),
+    radial-gradient(circle at 90% 20%, rgba(28, 138, 75, 0.07), transparent 40%),
+    radial-gradient(circle at 50% 100%, rgba(255, 106, 26, 0.06), transparent 55%);
+}
+
 /* Conic gradient accent, used sparingly on alternating sections */
 .bg-conic-accent {
   background-image: conic-gradient(
@@ -135,6 +143,16 @@ html.custom-cursor-active button {
     rgba(255, 106, 26, 0.08),
     rgba(28, 138, 75, 0.06),
     rgba(255, 106, 26, 0.08)
+  );
+}
+
+/* Softer conic for light card surfaces */
+.bg-conic-soft {
+  background-image: conic-gradient(
+    from 180deg at 50% 0%,
+    rgba(255, 106, 26, 0.05),
+    rgba(28, 138, 75, 0.035),
+    rgba(255, 106, 26, 0.05)
   );
 }
 

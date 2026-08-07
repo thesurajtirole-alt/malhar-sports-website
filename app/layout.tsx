@@ -7,6 +7,7 @@ import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { FloatingEnquireButton } from "@/components/ui/FloatingEnquireButton";
+import { RippleEffect } from "@/components/ui/RippleEffect";
 import { business } from "@/lib/business";
 import { getLocalBusinessSchema } from "@/lib/schema";
 
@@ -91,6 +92,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col font-body">
         <ScrollProgress />
         <CustomCursor />
+        <RippleEffect />
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

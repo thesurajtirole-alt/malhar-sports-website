@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { sportsFactPool, dayIndex } from "@/lib/daily-content";
+import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
+import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
   title: "Sports Fact of the Day",
@@ -11,7 +13,10 @@ export default function SportsFactPage() {
   const fact = sportsFactPool[dayIndex(sportsFactPool.length)];
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16 md:px-6">
+    <div className="relative overflow-hidden">
+      <BackgroundEffects variant="dots" grain={false} />
+      <div className="relative mx-auto max-w-2xl px-4 py-16 md:px-6">
+        <RevealOnScroll>
       <h1 className="text-center font-display text-4xl md:text-5xl">
         Sports Fact of the Day
       </h1>
@@ -26,6 +31,8 @@ export default function SportsFactPage() {
       <p className="mt-6 text-center text-sm text-ink/60">
         Kal ek naya fact aayega. Roz check karte raho.
       </p>
+        </RevealOnScroll>
+      </div>
     </div>
   );
 }

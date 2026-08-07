@@ -83,3 +83,37 @@ npm run dev
 - Micro-interactions (card lift/glow, button ripple, image parallax, section stagger-on-scroll-reveal) are partially in place (card hovers already existed; ripple and scroll-reveal are not yet built).
 - Dynamic import / code-splitting for the cursor and heavy animation code (Task 12) hasn't been done — everything currently loads in the main bundle.
 - Breadcrumb schema (Task 13) isn't added yet (Article/FAQ/LocalBusiness schema already were, from Slice 2).
+
+## Slice 4 — Backgrounds + micro-interactions everywhere
+
+Extended the Slice 3 background/motion system to every remaining section, closing the "no section should look empty" gap flagged earlier.
+
+### New reusable primitives
+- **`components/ui/RevealOnScroll.tsx`** — fade/slide/rotate-in on scroll, fires once. Wraps server-rendered children fine (composition, not conversion).
+- **`components/ui/StaggerGroup` / `StaggerItem`** (same file) — staggered grid/list reveal, used on every card grid site-wide.
+- **`components/ui/RippleEffect.tsx`** — mounted once in `app/layout.tsx`. Delegated pointerdown listener spawns a ripple on any button/link tap, no per-element markup needed. Skips entirely under `prefers-reduced-motion`.
+- **`bg-aurora-soft` / `bg-conic-soft`** (in `globals.css`) — low-alpha versions of the Hero's aurora/conic gradients, for use on white/light sections so they don't overpower body text.
+
+### Where backgrounds landed
+| Section | Variant |
+|---|---|
+| Hero | `aurora` (full strength, dark) |
+| Footer | `aurora-soft` (dark section, toned down since it's a lot of text) |
+| Homepage — Personality teaser | `conic-soft` |
+| Homepage — Khelo Aaj strip | `dots` |
+| Sports Hub | `conic-soft` |
+| Khelo hub + every game/calculator page | `dots` |
+| Blog listing + article page | `conic-soft` / `aurora-soft` |
+| Store, About | `aurora-soft` / `conic-soft` |
+| Indore Academies directory | `dots` |
+
+### Micro-interactions added
+- Every card grid site-wide now reveals with a stagger on scroll into view (games, calculators, blog posts, sports-hub categories, academies/grounds, store contact cards).
+- Ripple feedback on every button/link tap, site-wide, automatically.
+- Card hover lift (`-translate-y-1` + shadow) extended to contact cards, category cards, badge tiles that didn't have it before.
+
+### Still not done from the original 14-task brief
+- Image parallax — not applicable yet since the site doesn't use photographic images anywhere (no real store photos uploaded to `/public` besides the logo)
+- Dynamic imports / code-splitting for animation-heavy components (Task 12)
+- Breadcrumb schema (Task 13)
+- `CRICKET_API_KEY` — still needs to be added once you have a real key from cricapi.com; response shape should be spot-checked against the live API since it wasn't testable in this sandbox

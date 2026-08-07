@@ -11,6 +11,7 @@ import {
 import { mdxComponents } from "@/components/blog/mdx-components";
 import { getFAQSchema } from "@/lib/schema";
 import { business } from "@/lib/business";
+import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
 
 export function generateStaticParams() {
   return getAllBlogSlugs().map((slug) => ({ slug }));
@@ -59,7 +60,9 @@ export default async function BlogPostPage({
   };
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-16 md:px-6">
+    <div className="relative overflow-hidden">
+      <BackgroundEffects variant="aurora-soft" />
+      <div className="relative mx-auto max-w-2xl px-4 py-16 md:px-6">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
@@ -114,6 +117,7 @@ export default async function BlogPostPage({
         >
           WhatsApp Karo
         </a>
+      </div>
       </div>
     </div>
   );
