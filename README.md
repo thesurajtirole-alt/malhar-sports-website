@@ -117,3 +117,22 @@ Extended the Slice 3 background/motion system to every remaining section, closin
 - Dynamic imports / code-splitting for animation-heavy components (Task 12)
 - Breadcrumb schema (Task 13)
 - `CRICKET_API_KEY` — still needs to be added once you have a real key from cricapi.com; response shape should be spot-checked against the live API since it wasn't testable in this sandbox
+
+## Bugfix pass — Enquire button + idle cursor
+
+### Real bug found: FloatingEnquireButton never reappeared
+`useScrollDirection` set `direction: "down"` on a scroll event but **never reset it** once scrolling stopped. Since normal browsing is "scroll down, then stop reading," `direction` stayed stuck at `"down"` forever after the first downward scroll — so `visible = pastThreshold && direction !== "down"` was permanently `false` for most real usage. Fixed by adding an `isScrolling` flag that clears itself 150ms after the last scroll event, so the button reappears as soon as you stop scrolling (not just when you scroll back up).
+
+### Real bug found: cursor labels/idle-icon were nearly invisible
+The `.glass` style (`rgba(255,255,255,0.08)` background) was designed against Hero's dark background. Once backgrounds got added to every section (Slice 4), the same glass style was floating over **mostly light pages**, making white-on-near-transparent-white essentially invisible. Fixed:
+- Hover label pill → solid `bg-ink` (dark) instead of glass — visible on every background.
+- Resting cursor dot → solid orange with white ring instead of plain white.
+- Idle-morph icon circle → solid `gradient-orange` instead of glass.
+- Floating Enquire button → solid `gradient-orange` instead of glass (same root issue).
+
+### Diagnostic aid (dev-only, safe to leave in)
+- `components/ui/CustomCursor.tsx` logs `[CustomCursor] enabled: true/false {...}` to the browser console on mount in development, showing exactly which capability check (pointer/hover/reduced-motion) passed or failed.
+- `window.__cursorDebug` is set (dev-only) with `{ isIdle, label, showIdleIcon }` — open DevTools console and type `__cursorDebug` any time to see live state.
+- Both are gated by `process.env.NODE_ENV !== "production"` and compile away in the production build — they won't show up on your live site.
+
+**If the idle-cursor still doesn't visually morph after this fix:** open your browser's DevTools console on the live-preview build (`npm run dev`), wait 3+ seconds without touching the mouse, and check `__cursorDebug` — if `isIdle` is `true` there but nothing shows on screen, it's a render/CSS issue I can dig into further; if `isIdle` stays `false`, the capability gate is failing (check the `[CustomCursor] enabled:` log for which check failed) and I'll adjust the gating logic to be less strict.

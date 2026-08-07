@@ -39,6 +39,14 @@ export function CustomCursor() {
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setEnabled(canUseCustomCursor);
+    if (process.env.NODE_ENV !== "production") {
+      console.log("[CustomCursor] enabled:", canUseCustomCursor, {
+        pointerFine: window.matchMedia("(pointer: fine)").matches,
+        hoverHover: window.matchMedia("(hover: hover)").matches,
+        reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)")
+          .matches,
+      });
+    }
     if (canUseCustomCursor) {
       document.documentElement.classList.add("custom-cursor-active");
     }
@@ -96,9 +104,18 @@ export function CustomCursor() {
     };
   }, [enabled]);
 
-  if (!enabled) return null;
-
   const showIdleIcon = isIdle && !label;
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    (window as unknown as { __cursorDebug?: unknown }).__cursorDebug = {
+      isIdle,
+      label,
+      showIdleIcon,
+    };
+  }, [isIdle, label, showIdleIcon]);
+
+  if (!enabled) return null;
 
   return (
     <motion.div
@@ -113,7 +130,7 @@ export function CustomCursor() {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.5, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="glass flex h-10 w-10 items-center justify-center rounded-full text-lg shadow-lg"
+            className="gradient-orange flex h-11 w-11 items-center justify-center rounded-full text-lg shadow-xl ring-2 ring-white/40"
           >
             {idleIcon}
           </motion.div>
@@ -126,8 +143,8 @@ export function CustomCursor() {
             transition={{ duration: 0.2 }}
             className={
               label
-                ? "glass whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold text-white shadow-lg"
-                : "h-3 w-3 rounded-full bg-white shadow-md ring-2 ring-orange/50"
+                ? "flex items-center gap-1 whitespace-nowrap rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white shadow-xl ring-1 ring-white/10"
+                : "h-3 w-3 rounded-full bg-orange shadow-md ring-2 ring-white"
             }
           >
             {label}
