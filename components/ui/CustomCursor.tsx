@@ -16,12 +16,21 @@ const SPORT_LABELS: Record<string, string> = {
 
 /**
  * Renders a glass cursor that replaces the native pointer, but only when
- * it's safe to: fine pointer (mouse, not touch), hover-capable, and the
- * person hasn't asked for reduced motion. Any element can opt in to a
- * hover label via `data-cursor="Explore →"` or `data-cursor-sport="cricket"`.
+ * it's safe to: reduced motion is off, and — critically — the person is
+ * actually using a mouse right now.
+ *
+ * We deliberately do NOT rely on `(pointer: fine)` / `(hover: hover)`
+ * media queries as the gate. Those report the device's static hardware
+ * capability, and on touchscreen laptops/2-in-1s, Chrome and Edge on
+ * Windows often report `hover: none` / `pointer: coarse` any time touch
+ * hardware is present at all — even while the person is using a mouse.
+ * Instead we listen for real Pointer Events and react to `pointerType`
+ * directly: a "mouse" event turns the cursor on, a "touch" event turns
+ * it off. This is correct on every device, hybrid or not.
  */
 export function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
   const [label, setLabel] = useState<string | null>(null);
   const { x, y } = useMousePosition();
   const { isIdle, idleIcon } = useIdleCursor();
@@ -30,28 +39,46 @@ export function CustomCursor() {
   const springY = useSpring(y, { stiffness: 400, damping: 40, mass: 0.4 });
 
   useEffect(() => {
-    // One-time capability check on mount (window/matchMedia don't exist
-    // during SSR, so this can't be computed as a lazy initial state).
-    const canUseCustomCursor =
-      window.matchMedia("(pointer: fine)").matches &&
-      window.matchMedia("(hover: hover)").matches &&
-      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setEnabled(canUseCustomCursor);
+    setReducedMotion(prefersReducedMotion);
+
     if (process.env.NODE_ENV !== "production") {
-      console.log("[CustomCursor] enabled:", canUseCustomCursor, {
+      console.log("[CustomCursor] reducedMotion:", prefersReducedMotion, {
         pointerFine: window.matchMedia("(pointer: fine)").matches,
         hoverHover: window.matchMedia("(hover: hover)").matches,
-        reducedMotion: window.matchMedia("(prefers-reduced-motion: reduce)")
-          .matches,
+        note: "pointer/hover above are informational only — actual enable/disable now reacts to real pointerdown events, see __cursorDebug",
       });
     }
-    if (canUseCustomCursor) {
-      document.documentElement.classList.add("custom-cursor-active");
+
+    if (prefersReducedMotion) return;
+
+    function handlePointerDown(e: PointerEvent) {
+      const isMouse = e.pointerType === "mouse";
+      setEnabled(isMouse);
+      document.documentElement.classList.toggle("custom-cursor-active", isMouse);
     }
 
+    // Some browsers fire a pointermove for the very first mouse motion
+    // before any click — catch that too so the cursor can turn on without
+    // requiring a click first.
+    function handlePointerMove(e: PointerEvent) {
+      if (e.pointerType === "mouse") {
+        setEnabled(true);
+        document.documentElement.classList.add("custom-cursor-active");
+      }
+    }
+
+    window.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove, {
+      once: true,
+    });
+
     return () => {
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
       document.documentElement.classList.remove("custom-cursor-active");
     };
   }, []);
@@ -109,11 +136,13 @@ export function CustomCursor() {
   useEffect(() => {
     if (process.env.NODE_ENV === "production") return;
     (window as unknown as { __cursorDebug?: unknown }).__cursorDebug = {
+      enabled,
+      reducedMotion,
       isIdle,
       label,
       showIdleIcon,
     };
-  }, [isIdle, label, showIdleIcon]);
+  }, [enabled, reducedMotion, isIdle, label, showIdleIcon]);
 
   if (!enabled) return null;
 

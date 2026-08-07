@@ -136,3 +136,11 @@ The `.glass` style (`rgba(255,255,255,0.08)` background) was designed against He
 - Both are gated by `process.env.NODE_ENV !== "production"` and compile away in the production build — they won't show up on your live site.
 
 **If the idle-cursor still doesn't visually morph after this fix:** open your browser's DevTools console on the live-preview build (`npm run dev`), wait 3+ seconds without touching the mouse, and check `__cursorDebug` — if `isIdle` is `true` there but nothing shows on screen, it's a render/CSS issue I can dig into further; if `isIdle` stays `false`, the capability gate is failing (check the `[CustomCursor] enabled:` log for which check failed) and I'll adjust the gating logic to be less strict.
+
+## Bugfix — cursor detection on touchscreen laptops
+
+**Root cause found via debugging with the user:** on a touchscreen-capable Windows laptop, `window.matchMedia("(pointer: fine)")` and `(hover: hover)` returned `false` even while using a real mouse — a known Chrome/Edge-on-Windows quirk where these queries reflect "does this device have touch hardware at all," not "what is the person using right now."
+
+**Fix:** `components/ui/CustomCursor.tsx` no longer gates on those media queries. It now listens for real `pointerdown`/`pointermove` events and checks `e.pointerType` directly — `"mouse"` turns the cursor on, `"touch"` turns it off. `prefers-reduced-motion` is still respected as a hard override (accessibility requirement, Task 11) — if that's on, the cursor never activates, by design.
+
+This is more robust than the media-query approach for any hybrid device (Surface, 2-in-1 laptops, touchscreen All-in-Ones) and requires no configuration.
