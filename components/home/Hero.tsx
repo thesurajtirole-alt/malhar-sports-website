@@ -5,6 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { business } from "@/lib/business";
 import { sportMoods, type SportKey } from "@/lib/sports-data";
 import { cn } from "@/lib/utils";
+import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
+import { LiveScoreWidget } from "@/components/ui/LiveScoreWidget";
+import { Magnetic } from "@/components/ui/Magnetic";
 
 export function Hero() {
   const [active, setActive] = useState<SportKey>("cricket");
@@ -12,27 +15,35 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden bg-ink text-paper">
-      {/* Ambient scoreboard dot texture */}
-      <div className="scoreboard-dots pointer-events-none absolute inset-0 opacity-40" />
-      <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-orange/30 blur-3xl" />
-      <div className="pointer-events-none absolute -left-24 bottom-0 h-72 w-72 rounded-full bg-turf/20 blur-3xl" />
+      <BackgroundEffects variant="aurora" />
+      <div className="scoreboard-dots pointer-events-none absolute inset-0 opacity-20" />
 
       <div className="relative mx-auto flex min-h-[88vh] max-w-6xl flex-col justify-center px-4 py-20 md:px-6">
-        <motion.p
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-3 inline-flex w-fit items-center gap-2 rounded-pill bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-paper/80"
-        >
-          <span className="h-2 w-2 rounded-full bg-turf" />
-          Abhi Open — {business.hours.display}
-        </motion.p>
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex w-fit items-center gap-2 rounded-pill bg-white/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-paper/80"
+          >
+            <span className="h-2 w-2 rounded-full bg-turf" />
+            Abhi Open — {business.hours.display}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <LiveScoreWidget />
+          </motion.div>
+        </div>
 
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="max-w-3xl font-display text-5xl leading-[1.05] tracking-wide md:text-7xl"
+          className="max-w-3xl font-display text-5xl leading-[1.05] tracking-tight md:text-7xl"
         >
           Bhai... <span className="text-orange">Aaj</span> Kis Sport Ka{" "}
           <span className="text-orange">Mood</span> Hai?
@@ -59,6 +70,7 @@ export function Hero() {
             <button
               key={mood.key}
               onClick={() => setActive(mood.key)}
+              data-cursor-sport={mood.key}
               className={cn(
                 "flex items-center gap-2 rounded-pill border px-5 py-3 text-sm font-semibold transition-all",
                 active === mood.key
@@ -105,18 +117,22 @@ export function Hero() {
           transition={{ duration: 0.6, delay: 0.5 }}
           className="mt-8 flex flex-wrap gap-3"
         >
-          <a
-            href={business.whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-pill bg-turf px-6 py-3 text-sm font-semibold text-white transition-transform hover:scale-105"
-          >
-            Confuse Ho? Pucho Na 😄
-          </a>
+          <Magnetic>
+            <a
+              href={business.whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-cursor="Explore →"
+              className="inline-block rounded-pill bg-turf px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-turf/20"
+            >
+              Confuse Ho? Pucho Na 😄
+            </a>
+          </Magnetic>
           <a
             href={business.mapsLink}
             target="_blank"
             rel="noopener noreferrer"
+            data-cursor="Explore →"
             className="rounded-pill border border-white/20 px-6 py-3 text-sm font-semibold text-paper hover:bg-white/10"
           >
             Dukaan Ka Raasta Dikhao

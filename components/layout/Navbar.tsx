@@ -26,9 +26,9 @@ export function Navbar() {
           <Image
             src="/logo.png"
             alt="Malhar Sports and Shoes"
-            width={40}
-            height={40}
-            className="h-10 w-10"
+            width={128}
+            height={128}
+            className="h-12 w-12 md:h-[60px] md:w-[60px]"
             priority
           />
         </Link>

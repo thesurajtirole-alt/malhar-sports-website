@@ -14,9 +14,12 @@
   --foreground: var(--color-stadium-black);
   --surface: var(--color-tape-gray);
 
-  --font-display: var(--font-anton), "Arial Narrow", sans-serif;
+  /* Heading: General Sans (Fontshare, loaded via <link> in layout.tsx) */
+  --font-display: "General Sans", var(--font-jakarta), "Segoe UI", sans-serif;
+  /* Body: Plus Jakarta Sans */
   --font-body: var(--font-jakarta), "Segoe UI", sans-serif;
-  --font-score: var(--font-jetbrains), ui-monospace, monospace;
+  /* Numbers / scores / ticker: Space Grotesk */
+  --font-score: var(--font-space-grotesk), ui-monospace, monospace;
 
   --radius-pill: 999px;
   --radius-card: 1.25rem;
@@ -63,8 +66,12 @@ h2,
 h3,
 .font-display {
   font-family: var(--font-display);
-  letter-spacing: 0.01em;
-  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+.font-score {
+  font-family: var(--font-score);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -84,6 +91,18 @@ h3,
   border-radius: 4px;
 }
 
+/* Custom cursor hides the native one on non-touch, motion-OK desktops.
+   JS (useIsCursorEnabled) toggles this class on <html>; default state
+   keeps the native cursor visible until JS confirms it's safe to hide it,
+   so touch devices, keyboard users, and reduced-motion users are never affected. */
+html.custom-cursor-active,
+html.custom-cursor-active a,
+html.custom-cursor-active button {
+  cursor: none;
+}
+
+/* --- Backgrounds / premium layered effects --- */
+
 .gradient-orange {
   background: linear-gradient(
     135deg,
@@ -101,6 +120,45 @@ h3,
   background-size: 14px 14px;
 }
 
+/* Aurora / mesh gradient backdrop for hero + dark sections */
+.bg-aurora {
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(255, 106, 26, 0.35), transparent 45%),
+    radial-gradient(circle at 85% 15%, rgba(28, 138, 75, 0.25), transparent 40%),
+    radial-gradient(circle at 50% 90%, rgba(255, 106, 26, 0.15), transparent 50%);
+}
+
+/* Conic gradient accent, used sparingly on alternating sections */
+.bg-conic-accent {
+  background-image: conic-gradient(
+    from 180deg at 50% 0%,
+    rgba(255, 106, 26, 0.08),
+    rgba(28, 138, 75, 0.06),
+    rgba(255, 106, 26, 0.08)
+  );
+}
+
+/* Subtle film-grain noise overlay — layer this absolutely inside a
+   position:relative section, pointer-events-none, low opacity */
+.bg-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  opacity: 0.05;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(14, 15, 16, 0.06);
+}
+
 @keyframes ticker-scroll {
   from {
     transform: translateX(0);
@@ -114,8 +172,69 @@ h3,
   animation: ticker-scroll 22s linear infinite;
 }
 
+@keyframes live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.animate-live-pulse {
+  animation: live-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes enquire-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 106, 26, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(255, 106, 26, 0);
+  }
+}
+
+.animate-enquire-pulse {
+  animation: enquire-pulse 2s ease-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-ticker {
+  .animate-ticker,
+  .animate-live-pulse,
+  .animate-enquire-pulse {
     animation: none;
   }
+}
+
+/* Thin top scroll-progress bar */
+.scroll-progress-bar {
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--color-court-orange),
+    var(--color-turf-green)
+  );
+  transform-origin: 0 50%;
+}
+
+/* Nicer scrollbar (WebKit + Firefox) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-court-orange) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-court-orange);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
 }

@@ -27,6 +27,7 @@ export default function BlogIndexPage() {
           <Link
             key={post.slug}
             href={`/blog/${post.slug}`}
+            data-cursor="Play →"
             className="group rounded-card border border-tape p-6 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-orange/10 md:p-8"
           >
             <p className="text-xs font-semibold uppercase tracking-wide text-orange">

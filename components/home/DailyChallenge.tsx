@@ -38,6 +38,7 @@ export function DailyChallenge() {
           <Link
             key={card.href}
             href={card.href}
+            data-cursor="Play →"
             className="group rounded-card border border-tape p-6 transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-orange/10"
           >
             <span className="text-3xl">{card.emoji}</span>

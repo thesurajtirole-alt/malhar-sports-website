@@ -1,17 +1,14 @@
 import type { Metadata } from "next";
-import { Anton, Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { WhatsAppButton } from "@/components/layout/WhatsAppButton";
+import { CustomCursor } from "@/components/ui/CustomCursor";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { FloatingEnquireButton } from "@/components/ui/FloatingEnquireButton";
 import { business } from "@/lib/business";
 import { getLocalBusinessSchema } from "@/lib/schema";
-
-const anton = Anton({
-  variable: "--font-anton",
-  subsets: ["latin"],
-  weight: "400",
-});
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -19,10 +16,10 @@ const jakarta = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700"],
 });
 
-const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
-  weight: ["500"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -73,19 +70,32 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${anton.variable} ${jakarta.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${jakarta.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <head>
+        {/* General Sans — Fontshare (not on Google Fonts), used as --font-display */}
+        <link
+          rel="preconnect"
+          href="https://api.fontshare.com"
+          crossOrigin="anonymous"
+        />
+        <link
+          href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap"
+          rel="stylesheet"
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       </head>
       <body className="min-h-full flex flex-col font-body">
+        <ScrollProgress />
+        <CustomCursor />
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
         <WhatsAppButton />
+        <FloatingEnquireButton />
       </body>
     </html>
   );
