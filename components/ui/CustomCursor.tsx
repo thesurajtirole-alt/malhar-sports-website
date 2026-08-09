@@ -5,17 +5,8 @@ import { motion, AnimatePresence, useSpring } from "framer-motion";
 import { useMousePosition } from "@/hooks/useMousePosition";
 import { useIdleCursor } from "@/hooks/useIdleCursor";
 
-const SPORT_LABELS: Record<string, string> = {
-  cricket: "🏏 Cricket",
-  football: "⚽ Football",
-  badminton: "🏸 Smash",
-  running: "🏃 Run",
-  gym: "💪 Lift",
-  school: "🎒 Explore",
-};
-
 /**
- * Renders a glass cursor that replaces the native pointer, but only when
+ * Renders a custom cursor that replaces the native pointer, but only when
  * it's safe to: reduced motion is off, and — critically — the person is
  * actually using a mouse right now.
  *
@@ -27,16 +18,22 @@ const SPORT_LABELS: Record<string, string> = {
  * Instead we listen for real Pointer Events and react to `pointerType`
  * directly: a "mouse" event turns the cursor on, a "touch" event turns
  * it off. This is correct on every device, hybrid or not.
+ *
+ * Two visual states only, by design: a tennis ball follows the pointer
+ * at rest, and after 3s of no movement it morphs into a cycling sport
+ * emoji (handled by useIdleCursor). There is intentionally no hover
+ * state — no label swap, no size change on buttons/links.
  */
 export function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [label, setLabel] = useState<string | null>(null);
   const { x, y } = useMousePosition();
   const { isIdle, idleIcon } = useIdleCursor();
 
-  const springX = useSpring(x, { stiffness: 400, damping: 40, mass: 0.4 });
-  const springY = useSpring(y, { stiffness: 400, damping: 40, mass: 0.4 });
+  // Tighter spring than before — less "floaty" lag, closer to 1:1 tracking
+  // while still smoothing out raw mousemove jitter.
+  const springX = useSpring(x, { stiffness: 700, damping: 50, mass: 0.2 });
+  const springY = useSpring(y, { stiffness: 700, damping: 50, mass: 0.2 });
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -46,11 +43,7 @@ export function CustomCursor() {
     setReducedMotion(prefersReducedMotion);
 
     if (process.env.NODE_ENV !== "production") {
-      console.log("[CustomCursor] reducedMotion:", prefersReducedMotion, {
-        pointerFine: window.matchMedia("(pointer: fine)").matches,
-        hoverHover: window.matchMedia("(hover: hover)").matches,
-        note: "pointer/hover above are informational only — actual enable/disable now reacts to real pointerdown events, see __cursorDebug",
-      });
+      console.log("[CustomCursor] reducedMotion:", prefersReducedMotion);
     }
 
     if (prefersReducedMotion) return;
@@ -89,60 +82,13 @@ export function CustomCursor() {
   }, [x, y, springX, springY]);
 
   useEffect(() => {
-    if (!enabled) return;
-
-    function handleOver(e: MouseEvent) {
-      const target = (e.target as HTMLElement)?.closest?.(
-        "[data-cursor], [data-cursor-sport], button, a"
-      );
-      if (!target) {
-        setLabel(null);
-        return;
-      }
-
-      const sportKey = target.getAttribute("data-cursor-sport");
-      const customLabel = target.getAttribute("data-cursor");
-
-      if (sportKey && SPORT_LABELS[sportKey]) {
-        setLabel(SPORT_LABELS[sportKey]);
-      } else if (customLabel) {
-        setLabel(customLabel);
-      } else if (target.tagName === "BUTTON" || target.tagName === "A") {
-        setLabel("Explore →");
-      } else {
-        setLabel(null);
-      }
-    }
-
-    function handleOut(e: MouseEvent) {
-      const related = e.relatedTarget as HTMLElement | null;
-      if (
-        !related?.closest?.("[data-cursor], [data-cursor-sport], button, a")
-      ) {
-        setLabel(null);
-      }
-    }
-
-    document.addEventListener("mouseover", handleOver);
-    document.addEventListener("mouseout", handleOut);
-    return () => {
-      document.removeEventListener("mouseover", handleOver);
-      document.removeEventListener("mouseout", handleOut);
-    };
-  }, [enabled]);
-
-  const showIdleIcon = isIdle && !label;
-
-  useEffect(() => {
     if (process.env.NODE_ENV === "production") return;
     (window as unknown as { __cursorDebug?: unknown }).__cursorDebug = {
       enabled,
       reducedMotion,
       isIdle,
-      label,
-      showIdleIcon,
     };
-  }, [enabled, reducedMotion, isIdle, label, showIdleIcon]);
+  }, [enabled, reducedMotion, isIdle]);
 
   if (!enabled) return null;
 
@@ -152,34 +98,57 @@ export function CustomCursor() {
       className="pointer-events-none fixed z-[999] -translate-x-1/2 -translate-y-1/2"
     >
       <AnimatePresence mode="wait">
-        {showIdleIcon ? (
+        {isIdle ? (
           <motion.div
             key={idleIcon}
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.5, opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25 }}
             className="gradient-orange flex h-11 w-11 items-center justify-center rounded-full text-lg shadow-xl ring-2 ring-white/40"
           >
             {idleIcon}
           </motion.div>
         ) : (
           <motion.div
-            key={label ?? "dot"}
+            key="tennis-ball"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className={
-              label
-                ? "flex items-center gap-1 whitespace-nowrap rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white shadow-xl ring-1 ring-white/10"
-                : "h-3 w-3 rounded-full bg-orange shadow-md ring-2 ring-white"
-            }
+            transition={{ duration: 0.15 }}
           >
-            {label}
+            <TennisBall />
           </motion.div>
         )}
       </AnimatePresence>
     </motion.div>
+  );
+}
+
+function TennisBall() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      className="drop-shadow-md"
+      aria-hidden="true"
+    >
+      <circle cx="10" cy="10" r="9" fill="#d4f000" stroke="#a8c400" strokeWidth="0.75" />
+      <path
+        d="M2.5 5 Q9 10 2.5 15"
+        stroke="#ffffff"
+        strokeWidth="1.4"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M17.5 5 Q11 10 17.5 15"
+        stroke="#ffffff"
+        strokeWidth="1.4"
+        fill="none"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }

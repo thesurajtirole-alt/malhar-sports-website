@@ -11,11 +11,12 @@ export interface IdleCursorState {
 
 /**
  * After `idleMs` of no mouse movement, `isIdle` flips true and `idleIcon`
- * cycles through IDLE_ICONS every `cycleMs`. Any movement resets it.
+ * cycles through IDLE_ICONS every `cycleMs` (default: 3s idle wait, 0.75s
+ * per icon). Any movement resets it.
  */
 export function useIdleCursor(
   idleMs = 3000,
-  cycleMs = 2000
+  cycleMs = 750
 ): IdleCursorState {
   const [isIdle, setIsIdle] = useState(false);
   const [iconIndex, setIconIndex] = useState(0);

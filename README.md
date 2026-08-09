@@ -144,3 +144,13 @@ The `.glass` style (`rgba(255,255,255,0.08)` background) was designed against He
 **Fix:** `components/ui/CustomCursor.tsx` no longer gates on those media queries. It now listens for real `pointerdown`/`pointermove` events and checks `e.pointerType` directly — `"mouse"` turns the cursor on, `"touch"` turns it off. `prefers-reduced-motion` is still respected as a hard override (accessibility requirement, Task 11) — if that's on, the cursor never activates, by design.
 
 This is more robust than the media-query approach for any hybrid device (Surface, 2-in-1 laptops, touchscreen All-in-Ones) and requires no configuration.
+
+## Cursor v2 — simplified per feedback
+
+Removed the hover-label system entirely (no "Explore →", no per-sport label swaps on the Hero buttons) — the cursor now has exactly two states:
+1. **Resting** — a small tennis ball (SVG, hand-drawn seam curves) follows the mouse.
+2. **Idle** (3s no movement) — morphs into the cycling sport-emoji circle, unchanged from before, cycling every 0.75s.
+
+Also tightened the spring physics (`stiffness: 700, damping: 50, mass: 0.2`, up from `400/40/0.4`) so tracking feels closer to 1:1 instead of floaty/lagging behind the real pointer.
+
+`data-cursor` / `data-cursor-sport` attributes still exist scattered across various components (Hero sport picker, card grids) from the earlier version — they're now inert/unused by CustomCursor and safe to ignore. Not removed from the markup since they're harmless, but flagging in case you go looking for why they're still there.
