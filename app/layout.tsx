@@ -10,6 +10,7 @@ import { FloatingEnquireButton } from "@/components/ui/FloatingEnquireButton";
 import { RippleEffect } from "@/components/ui/RippleEffect";
 import { business } from "@/lib/business";
 import { getLocalBusinessSchema } from "@/lib/schema";
+import { Analytics } from "@vercel/analytics/next";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -98,6 +99,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Footer />
         <WhatsAppButton />
         <FloatingEnquireButton />
+        <Analytics />
       </body>
     </html>
   );
