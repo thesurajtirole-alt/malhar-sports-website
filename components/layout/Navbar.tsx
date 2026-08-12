@@ -22,32 +22,34 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-tape bg-paper/90 backdrop-blur-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-6">
-        <Link href="/" className="flex items-center">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 md:px-6">
+        <Link href="/" className="flex shrink-0 items-center">
           <Image
-            src="/logo-wordmark.png"
-            alt="Malhar — Sports Wear and Shoes"
-            width={415}
-            height={98}
-            className="h-11 w-auto transition-transform duration-300 [filter:drop-shadow(1.5px_2px_0px_rgba(0,0,0,0.25))_drop-shadow(-1px_-1px_0px_rgba(255,255,255,0.5))] hover:[transform:perspective(300px)_rotateX(8deg)_scale(1.03)] md:h-16"
+            src="/logo.png"
+            alt="Malhar Sports and Shoes"
+            width={200}
+            height={200}
+            className="h-14 w-14 transition-transform duration-300 [filter:drop-shadow(1.5px_2px_2px_rgba(0,0,0,0.25))] hover:scale-105 xl:h-[76px] xl:w-[76px]"
             priority
           />
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex">
+        {/* Full nav only appears once there's genuinely room for it (xl+),
+            so it never wraps to a second line — narrower screens get the
+            hamburger menu instead. */}
+        <nav className="hidden items-center gap-5 xl:flex">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="font-body text-sm font-medium text-ink/80 transition-colors hover:text-orange"
+              className="whitespace-nowrap font-body text-sm font-medium text-ink/80 transition-colors hover:text-orange"
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
-          <AuthButton />
+        <div className="hidden items-center gap-3 xl:flex">
           {business.social.instagram && (
             <a
               href={business.social.instagram}
@@ -61,16 +63,17 @@ export function Navbar() {
           )}
           <a
             href={business.telLink}
-            className="flex items-center gap-1.5 text-sm font-medium text-ink/80 hover:text-orange"
+            aria-label="Call Karo"
+            className="text-ink/70 hover:text-orange"
           >
-            <Phone className="h-4 w-4" />
-            Call Karo
+            <Phone className="h-5 w-5" />
           </a>
+          <AuthButton />
           <a
             href={business.whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="gradient-orange rounded-pill px-5 py-2 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-105"
+            className="gradient-orange whitespace-nowrap rounded-pill px-5 py-2 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-105"
           >
             WhatsApp Karo
           </a>
@@ -79,7 +82,7 @@ export function Navbar() {
         <button
           aria-label={open ? "Menu band karo" : "Menu kholo"}
           onClick={() => setOpen((v) => !v)}
-          className="rounded-full p-2 text-ink hover:bg-tape md:hidden"
+          className="rounded-full p-2 text-ink hover:bg-tape xl:hidden"
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
@@ -87,7 +90,7 @@ export function Navbar() {
 
       <div
         className={cn(
-          "md:hidden overflow-hidden border-t border-tape bg-paper transition-[max-height] duration-300",
+          "xl:hidden overflow-hidden border-t border-tape bg-paper transition-[max-height] duration-300",
           open ? "max-h-96" : "max-h-0"
         )}
       >

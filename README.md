@@ -209,3 +209,23 @@ The earlier version of this feature had phone login accept *any* number with no 
 **This changes the setup requirement:** phone login now *requires* Upstash Redis to be configured (it's where accounts are stored — see `lib/auth-users.ts`) — without it, signup returns a clear 503 error telling the person to use Google instead. This is a step up in real requirements from before, but a necessary one: password-based auth can't work without somewhere to store the password hash.
 
 Google sign-in is unaffected by this — it still just needs `AUTH_GOOGLE_ID` / `AUTH_GOOGLE_SECRET` / `AUTH_SECRET` as documented above, no Redis needed for Google specifically (though Redis is still needed for the streak-sync feature to work across devices regardless of which login method is used).
+
+## "Now" priorities — sitemap, robots, legal pages, analytics
+
+### New environment variables
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` — your GA4 Measurement ID (looks like `G-XXXXXXXXXX`). Get one at [analytics.google.com](https://analytics.google.com) → Admin → create a property for your site → Data Streams → Web. Without this, no analytics script loads at all — zero performance cost, zero tracking, until you add it.
+- `GOOGLE_SITE_VERIFICATION` — the verification code from [Google Search Console](https://search.google.com/search-console) when you add your property via the "HTML tag" method (copy just the `content="..."` value, not the whole tag). Without this, the verification meta tag simply doesn't render — harmless, just means Search Console won't be able to confirm ownership yet.
+
+Add both in Vercel → Settings → Environment Variables, then redeploy.
+
+### What's new
+- **`app/sitemap.ts`** — auto-generated XML sitemap covering every static route plus every blog article (pulls slugs from `content/blog/*.mdx` automatically — new articles appear here with zero code changes). Live at `/sitemap.xml`.
+- **`app/robots.ts`** — allows all crawlers, disallows `/api/*`, points at the sitemap. Live at `/robots.txt`.
+- **`/privacy`** — Privacy Policy, written to reflect what this site *actually* collects (Google OAuth data, phone+password for the credentials login, gamification data in localStorage + optionally synced to Redis). Linked in the footer.
+- **`/terms`** — Terms of Service, including honest disclosure that phone login has no OTP verification, and that the Indore academies directory is unverified third-party data.
+- **`components/analytics/GoogleAnalytics.tsx`** — loads GA4 only if `NEXT_PUBLIC_GA_MEASUREMENT_ID` is set.
+- **`lib/analytics.ts`** — a `trackEvent()` helper, safe to call anywhere (no-ops if GA isn't loaded). Wired into the three highest-intent actions on the site so far: the floating WhatsApp button, the Hero's WhatsApp CTA, the Hero's "get directions" link, and the floating Enquire button. Extend this to other buttons the same way as needed.
+
+### Still outstanding from the "Now" list
+- Real store/product photos — biggest remaining gap, not something I can generate for you (needs actual photos of your store)
+- Verifying or removing unconfirmed entries in `lib/indore-venues.ts`

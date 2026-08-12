@@ -2,6 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useScrollDirection } from "@/hooks/useScrollDirection";
+import { trackEvent } from "@/lib/analytics";
 
 const FORM_URL = "https://forms.gle/TS1SeFwtdFJTKLEe6";
 
@@ -20,6 +21,7 @@ export function FloatingEnquireButton() {
           target="_blank"
           rel="noopener noreferrer"
           data-cursor="Enquire →"
+          onClick={() => trackEvent("enquire_form_click")}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 16 }}

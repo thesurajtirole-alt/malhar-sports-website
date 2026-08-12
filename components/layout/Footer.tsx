@@ -117,6 +117,14 @@ export function Footer() {
       <div className="border-t border-white/10 px-4 py-4 text-center text-xs text-paper/50 md:px-6">
         © {new Date().getFullYear()} Malhar Sports and Shoes, Indore. Sab
         rights reserved. Made with ❤️ for Indore.
+        {" · "}
+        <Link href="/privacy" className="hover:text-orange">
+          Privacy Policy
+        </Link>
+        {" · "}
+        <Link href="/terms" className="hover:text-orange">
+          Terms
+        </Link>
       </div>
       </div>
     </footer>

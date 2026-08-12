@@ -10,6 +10,7 @@ import { FloatingEnquireButton } from "@/components/ui/FloatingEnquireButton";
 import { RippleEffect } from "@/components/ui/RippleEffect";
 import { AuthSessionProvider } from "@/components/auth/AuthSessionProvider";
 import { AuthSync } from "@/components/auth/AuthSync";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
 import { business } from "@/lib/business";
 import { getLocalBusinessSchema } from "@/lib/schema";
 
@@ -65,6 +66,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -92,6 +96,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
       </head>
       <body className="min-h-full flex flex-col font-body">
+        <GoogleAnalytics />
         <AuthSessionProvider>
           <AuthSync />
           <ScrollProgress />

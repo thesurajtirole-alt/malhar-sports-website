@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
 import { LiveScoreWidget } from "@/components/ui/LiveScoreWidget";
 import { Magnetic } from "@/components/ui/Magnetic";
+import { trackEvent } from "@/lib/analytics";
 
 export function Hero() {
   const [active, setActive] = useState<SportKey>("cricket");
@@ -123,6 +124,7 @@ export function Hero() {
               target="_blank"
               rel="noopener noreferrer"
               data-cursor="Explore →"
+              onClick={() => trackEvent("whatsapp_click", { source: "hero_cta" })}
               className="inline-block rounded-pill bg-turf px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-turf/20"
             >
               Confuse Ho? Pucho Na 😄
@@ -133,6 +135,7 @@ export function Hero() {
             target="_blank"
             rel="noopener noreferrer"
             data-cursor="Explore →"
+            onClick={() => trackEvent("directions_click", { source: "hero_cta" })}
             className="rounded-pill border border-white/20 px-6 py-3 text-sm font-semibold text-paper hover:bg-white/10"
           >
             Dukaan Ka Raasta Dikhao
