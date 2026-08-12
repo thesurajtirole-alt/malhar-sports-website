@@ -9,6 +9,7 @@ import {
 } from "@/lib/quiz-data";
 import { unlockBadge, addPoints, BADGES } from "@/lib/gamification";
 import { business } from "@/lib/business";
+import { trackEvent } from "@/lib/analytics";
 
 export function PersonalityQuiz() {
   const [step, setStep] = useState(0);
@@ -31,6 +32,7 @@ export function PersonalityQuiz() {
 
     if (step === quizQuestions.length - 1) {
       addPoints(10);
+      trackEvent("quiz_completed", { quiz: "sports_personality" });
     }
     setStep((s) => s + 1);
   }

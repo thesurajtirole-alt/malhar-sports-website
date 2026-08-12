@@ -29,6 +29,15 @@ export default function IndoreAcademiesPage() {
           </p>
         </RevealOnScroll>
 
+        <RevealOnScroll delay={0.05}>
+          <div className="mx-auto mt-6 max-w-lg rounded-2xl border border-orange/20 bg-orange/5 p-4 text-center text-sm text-ink/70">
+            ⚠️ Ye list publicly available information se banayi gayi hai aur
+            humne khud verify nahi ki hai. Visit ya call karne se pehle
+            details confirm kar lena — timings, fees, aur contact info badal
+            sakti hai.
+          </div>
+        </RevealOnScroll>
+
         <RevealOnScroll delay={0.1}>
           <h2 className="mb-5 mt-14 font-display text-2xl normal-case tracking-normal">
             Grounds & Stadiums

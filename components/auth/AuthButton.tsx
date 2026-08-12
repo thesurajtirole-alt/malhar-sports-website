@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { X } from "lucide-react";
 import { getStreak } from "@/lib/gamification";
+import { trackEvent } from "@/lib/analytics";
 
 type Mode = "login" | "signup";
 
@@ -66,6 +67,9 @@ export function AuthButton() {
 
       // Refresh so server components (and useSession, on its next poll)
       // pick up the new session, then close the modal.
+      trackEvent(mode === "signup" ? "signup_success" : "login_success", {
+        method: "phone",
+      });
       router.refresh();
       setModalOpen(false);
       setLoading(false);
@@ -143,7 +147,10 @@ export function AuthButton() {
             </p>
 
             <button
-              onClick={() => signIn("google", { callbackUrl: "/" })}
+              onClick={() => {
+                trackEvent("login_click", { method: "google" });
+                signIn("google", { callbackUrl: "/" });
+              }}
               className="mt-5 flex w-full items-center justify-center gap-2 rounded-pill border border-tape py-3 text-sm font-semibold hover:bg-tape"
             >
               Continue with Google

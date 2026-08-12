@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { dailyChallengePool, dayIndex } from "@/lib/daily-content";
 import { addPoints, bumpStreak, unlockBadge } from "@/lib/gamification";
+import { trackEvent } from "@/lib/analytics";
 
 export function DailyChallengeQuiz() {
   const q = dailyChallengePool[dayIndex(dailyChallengePool.length)];
@@ -17,6 +18,7 @@ export function DailyChallengeQuiz() {
       unlockBadge("champion");
       const s = bumpStreak();
       setStreak(s.count);
+      trackEvent("daily_streak_continued", { streak_count: s.count });
     }
   }
 

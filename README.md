@@ -229,3 +229,26 @@ Add both in Vercel → Settings → Environment Variables, then redeploy.
 ### Still outstanding from the "Now" list
 - Real store/product photos — biggest remaining gap, not something I can generate for you (needs actual photos of your store)
 - Verifying or removing unconfirmed entries in `lib/indore-venues.ts`
+
+## Content + trust + tracking pass (while photos are pending)
+
+### 6 new blog articles (2 → 8 total)
+- Badminton racket buying guide
+- Football studs/surface guide
+- Gym essentials for beginners
+- Sports shoes maintenance
+- School sports day kit checklist
+- Beginner running training guide
+
+Every category the site references now has at least one real article behind it. Sitemap picked all of these up automatically (24 URLs now, was 16) — confirms the dynamic sitemap system works as designed, no manual step needed when adding content.
+
+### Trust fix: unverified-data disclosure
+`/indore/academies` now shows a visible warning banner to actual visitors ("this list is from public sources, not verified — confirm before visiting/calling"). Previously this caveat only existed in code comments and the README — visitors had no way to know. This was a real gap, now closed. The underlying data itself is still unverified — that part still needs you to confirm or remove entries you can't personally vouch for.
+
+### Analytics: event tracking extended
+Beyond the WhatsApp/Enquire clicks from before, now also tracking:
+- `quiz_completed` — Sports Personality quiz finished
+- `daily_streak_continued` — with the actual streak count as a parameter, so you can see streak distribution in GA4
+- `login_click` (Google), `login_success` / `signup_success` (phone) — real funnel visibility into how people are actually signing in
+
+All of this is inert until you add `NEXT_PUBLIC_GA_MEASUREMENT_ID` — same as before.
