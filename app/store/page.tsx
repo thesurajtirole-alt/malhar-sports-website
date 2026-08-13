@@ -1,9 +1,17 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { business } from "@/lib/business";
 import { MapPin, Phone, Clock, MessageCircle } from "lucide-react";
 import { InstagramIcon } from "@/components/ui/InstagramIcon";
 import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
 import { RevealOnScroll, StaggerGroup, StaggerItem } from "@/components/ui/RevealOnScroll";
+
+const storePhotos = [
+  { src: "/store-photos/entrance.jpg", alt: "Malhar Sports store entrance", wide: true },
+  { src: "/store-photos/interior-counter.jpg", alt: "Store counter and shelves" },
+  { src: "/store-photos/shoes-wall.jpg", alt: "Shoes and cricket balls wall display" },
+  { src: "/store-photos/apparel-wall.jpg", alt: "Sportswear and jerseys display" },
+];
 
 export const metadata: Metadata = {
   title: "Store Visit Karo",
@@ -25,6 +33,27 @@ export default function StorePage() {
             Aao, gear feel karo, sahi advice lo — online kabhi wo feeling nahi
             de sakta.
           </p>
+        </RevealOnScroll>
+
+        <RevealOnScroll delay={0.05}>
+          <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-3">
+            {storePhotos.map((photo) => (
+              <div
+                key={photo.src}
+                className={`relative aspect-[4/3] overflow-hidden rounded-2xl ${
+                  photo.wide ? "col-span-2" : ""
+                }`}
+              >
+                <Image
+                  src={photo.src}
+                  alt={photo.alt}
+                  fill
+                  sizes="(min-width: 768px) 33vw, 50vw"
+                  className="object-cover"
+                />
+              </div>
+            ))}
+          </div>
         </RevealOnScroll>
 
         <StaggerGroup className="mt-10 grid gap-4 sm:grid-cols-2">

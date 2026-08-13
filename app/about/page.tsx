@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { business } from "@/lib/business";
 import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
 import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
@@ -19,6 +20,19 @@ export default function AboutPage() {
           <h1 className="text-center font-display text-4xl md:text-5xl">
             Hamari Kahani
           </h1>
+        </RevealOnScroll>
+
+        <RevealOnScroll delay={0.05}>
+          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-card">
+            <Image
+              src="/store-photos/interior-counter.jpg"
+              alt="Malhar Sports and Shoes store interior"
+              fill
+              sizes="(min-width: 768px) 672px, 100vw"
+              className="object-cover"
+              priority
+            />
+          </div>
         </RevealOnScroll>
 
         <RevealOnScroll delay={0.1}>

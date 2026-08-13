@@ -252,3 +252,20 @@ Beyond the WhatsApp/Enquire clicks from before, now also tracking:
 - `login_click` (Google), `login_success` / `signup_success` (phone) — real funnel visibility into how people are actually signing in
 
 All of this is inert until you add `NEXT_PUBLIC_GA_MEASUREMENT_ID` — same as before.
+
+## Real store photos added
+
+### A note on the source images
+The 4 photos provided had been run through an AI photo enhancer before sending. Enhancers like this are known to hallucinate/distort text during upscaling (they're pattern-matching pixels, not reading language) — the storefront signage photo came back with garbled Devanagari and **two phone numbers that don't match the real business number** in `lib/business.ts`. That one photo was cropped to remove the signage band entirely before use, so no incorrect contact info is displayed anywhere on the site. The other 3 photos (counter/interior, shoes wall, apparel wall) had no readable text affected and were used directly.
+
+**If you get a chance to send the original, unenhanced versions later**, the storefront shot in particular would be worth swapping back in — showing the real, correct signage is more valuable than a cropped interior-only shot.
+
+### Where photos landed
+- **Homepage** — new `StoreGallery` section (`components/home/StoreGallery.tsx`) right after the Matchday Ticker, showing 3 interior photos with a link to `/store`. This directly addresses the "no photos anywhere" gap flagged earlier — first-time visitors now see the real shop before anything else.
+- **`/store`** — full 4-photo gallery (entrance + 3 interior shots) added above the contact cards.
+- **`/about`** — one photo (interior/counter) added below the heading, giving the story a real face.
+- **LocalBusiness schema** (`lib/schema.ts`) — now points at a real store photo instead of the logo for the `image` field, which is what Google's structured data guidelines actually prefer for this field.
+
+### Technical notes
+- All 4 images resized to max 1600px wide and re-compressed (JPEG, quality 82) before adding to the repo — originals were 2-2.7MB each as PNG, now 215-370KB each as JPEG. Total `/public/store-photos/` folder: ~1.3MB.
+- All usages go through `next/image` with proper `sizes` attributes, so Vercel will further serve appropriately-sized/format-optimized versions per device automatically — these aren't just static `<img>` tags.
