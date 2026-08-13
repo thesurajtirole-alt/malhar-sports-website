@@ -269,3 +269,32 @@ The 4 photos provided had been run through an AI photo enhancer before sending. 
 ### Technical notes
 - All 4 images resized to max 1600px wide and re-compressed (JPEG, quality 82) before adding to the repo — originals were 2-2.7MB each as PNG, now 215-370KB each as JPEG. Total `/public/store-photos/` folder: ~1.3MB.
 - All usages go through `next/image` with proper `sizes` attributes, so Vercel will further serve appropriately-sized/format-optimized versions per device automatically — these aren't just static `<img>` tags.
+
+## Migrated from Upstash Redis to Supabase
+
+Per request, swapped the storage backend from Redis to Supabase (Postgres). Both did the same job — this just moves where the data lives. Functionally identical from the site's perspective.
+
+### What changed under the hood
+- `lib/supabase.ts` — new server-side Supabase client (service role key, never exposed to the browser).
+- `lib/auth-users.ts` — rewritten to query a Postgres `auth_users` table instead of Redis keys. Same exported functions (`getUserByPhone`, `createUser`, `isUserStoreConfigured`, `normalizePhone`), so `auth.ts` and the signup route needed zero changes.
+- `app/api/streak/route.ts` — rewritten to read/write a `user_streaks` table instead of Redis.
+- `@upstash/redis` removed from `package.json`, `@supabase/supabase-js` added.
+
+### Setup steps (do these in order)
+
+**1. Create the tables.** Open **`supabase-setup.sql`** (included in this project root) — copy its entire contents, paste into Supabase's Dashboard → **SQL Editor** → **New Query**, and click **Run**. This creates the two tables the site needs (`auth_users`, `user_streaks`) with Row Level Security enabled (safe default — your server routes use the service role key which bypasses RLS anyway).
+
+**2. Get your credentials.** In your Supabase project dashboard → **Settings** → **API**:
+   - Copy the **Project URL**
+   - Copy the **`service_role` secret** key (NOT the `anon`/`public` key — this needs to be the one labeled "service_role", and Supabase will warn you it's secret, which is correct — never put this in client-side code, only server env vars)
+
+**3. Add both to Vercel** → Settings → Environment Variables:
+   - `NEXT_PUBLIC_SUPABASE_URL` = your Project URL
+   - `SUPABASE_SERVICE_ROLE_KEY` = your service_role key
+   - Check all three environment boxes for each, Save
+
+**4. Don't forget `AUTH_SECRET`** (from before — still required regardless of database choice, generate one at generate-secret.vercel.app/32 if you haven't already).
+
+**5. Redeploy** — Deployments tab → ⋯ on latest → Redeploy.
+
+**6. Test** — Sign Up with a phone number + password on your live site. If it works, check Supabase's **Table Editor** → `auth_users` — you should see your new row appear there.

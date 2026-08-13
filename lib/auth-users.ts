@@ -1,15 +1,4 @@
-import { Redis } from "@upstash/redis";
-
-const hasRedisConfig = Boolean(
-  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-);
-
-const redis = hasRedisConfig
-  ? new Redis({
-      url: process.env.UPSTASH_REDIS_REST_URL!,
-      token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-    })
-  : null;
+import { supabase, isSupabaseConfigured } from "./supabase";
 
 export interface StoredUser {
   phone: string;
@@ -18,35 +7,47 @@ export interface StoredUser {
 }
 
 export function isUserStoreConfigured(): boolean {
-  return redis !== null;
-}
-
-function userKey(phone: string) {
-  return `authuser:${phone}`;
+  return isSupabaseConfigured();
 }
 
 export async function getUserByPhone(
   phone: string
 ): Promise<StoredUser | null> {
-  if (!redis) return null;
-  const data = await redis.get<StoredUser>(userKey(phone));
-  return data ?? null;
+  if (!supabase) return null;
+
+  const { data, error } = await supabase
+    .from("auth_users")
+    .select("phone, password_hash, created_at")
+    .eq("phone", phone)
+    .maybeSingle();
+
+  if (error || !data) return null;
+
+  return {
+    phone: data.phone,
+    passwordHash: data.password_hash,
+    createdAt: data.created_at,
+  };
 }
 
 export async function createUser(
   phone: string,
   passwordHash: string
 ): Promise<StoredUser> {
-  if (!redis) {
-    throw new Error("User store not configured (missing Upstash Redis env vars)");
+  if (!supabase) {
+    throw new Error("User store not configured (missing Supabase env vars)");
   }
-  const user: StoredUser = {
-    phone,
-    passwordHash,
-    createdAt: new Date().toISOString(),
-  };
-  await redis.set(userKey(phone), user);
-  return user;
+
+  const createdAt = new Date().toISOString();
+  const { error } = await supabase
+    .from("auth_users")
+    .insert({ phone, password_hash: passwordHash, created_at: createdAt });
+
+  if (error) {
+    throw new Error(`Failed to create user: ${error.message}`);
+  }
+
+  return { phone, passwordHash, createdAt };
 }
 
 export function normalizePhone(raw: string): string {
