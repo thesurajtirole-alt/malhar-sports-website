@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { X } from "lucide-react";
@@ -12,6 +13,7 @@ type Mode = "login" | "signup";
 export function AuthButton() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [mounted, setMounted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mode, setMode] = useState<Mode>("login");
@@ -20,6 +22,15 @@ export function AuthButton() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [streakCount, setStreakCount] = useState(0);
+
+  useEffect(() => {
+    // Standard React "mounted" flag for portals: document.body doesn't
+    // exist during SSR, so this can't be a lazy initial state — it has
+    // to flip after mount, same category as the localStorage/capability
+    // checks elsewhere in this codebase.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     // localStorage doesn't exist during SSR, so this can't be a lazy
@@ -121,9 +132,9 @@ export function AuthButton() {
         Sign In
       </button>
 
-      {modalOpen && (
+      {mounted && modalOpen && createPortal(
         <div
-          className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto bg-black/50 p-4 py-10 sm:items-center"
+          className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto bg-black/50 p-4 py-10"
           onClick={() => setModalOpen(false)}
         >
           <div
@@ -224,7 +235,8 @@ export function AuthButton() {
               </button>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
