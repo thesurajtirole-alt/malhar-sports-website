@@ -123,11 +123,11 @@ export function AuthButton() {
 
       {modalOpen && (
         <div
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-[200] flex items-start justify-center overflow-y-auto bg-black/50 p-4 py-10 sm:items-center"
           onClick={() => setModalOpen(false)}
         >
           <div
-            className="w-full max-w-sm rounded-card bg-paper p-6"
+            className="w-full max-w-sm max-h-[85vh] overflow-y-auto rounded-card bg-paper p-6"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between">
