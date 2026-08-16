@@ -42,8 +42,12 @@ export const business = {
     value: 4.6,
     count: 49, // Google reviews — bump when you check again
   },
+  // The .in domain you're planning to buy eventually — not live yet.
+  // Once you own it and connect it in Vercel, change siteUrl below to
+  // match, and this whole file is the only place that needs updating
+  // (canonical URLs, sitemap, OG tags, schema all read from siteUrl).
   domain: "malharsportsandshoes.in",
-  siteUrl: "https://malharsportsandshoes.in",
+  siteUrl: "https://malhar-sports-website.vercel.app",
   social: {
     instagram: "https://www.instagram.com/malhar_sports_and_shoes_/",
     facebook: "",

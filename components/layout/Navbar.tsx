@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 const navLinks = [
   { href: "/sports-hub", label: "Sports Hub" },
   { href: "/khelo", label: "Khelo 🎮" },
+  { href: "/turfs", label: "Turf Book Karo ⚽" },
   { href: "/khelo/calculators/bmi", label: "Health Calculator" },
   { href: "/indore/academies", label: "Indore Sports" },
   { href: "/store", label: "Visit Store" },
