@@ -28,6 +28,24 @@ export async function POST(
   const session = await auth();
   const userId = session?.user?.id ?? session?.user?.email ?? null;
 
+  // Confirm the turf is actually live before accepting money-free but
+  // still-real bookings against it — prevents booking an unapproved or
+  // hidden turf via a direct API call, even though the UI already hides it.
+  const { data: turf } = await supabase
+    .from("turfs")
+    .select("id")
+    .eq("id", id)
+    .eq("is_active", true)
+    .eq("is_approved", true)
+    .maybeSingle();
+
+  if (!turf) {
+    return NextResponse.json(
+      { error: "Ye turf abhi available nahi hai." },
+      { status: 404 }
+    );
+  }
+
   const { data, error } = await supabase
     .from("turf_bookings")
     .insert({

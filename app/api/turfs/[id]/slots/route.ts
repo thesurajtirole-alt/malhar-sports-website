@@ -22,6 +22,8 @@ export async function GET(
     .from("turfs")
     .select("opening_time, closing_time, slot_duration_minutes")
     .eq("id", id)
+    .eq("is_active", true)
+    .eq("is_approved", true)
     .single();
 
   if (turfError || !turf) {

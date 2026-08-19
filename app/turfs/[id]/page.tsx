@@ -28,6 +28,7 @@ async function getTurf(id: string): Promise<Turf | null> {
     )
     .eq("id", id)
     .eq("is_active", true)
+    .eq("is_approved", true)
     .maybeSingle();
   return data;
 }

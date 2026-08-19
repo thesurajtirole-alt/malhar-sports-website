@@ -11,7 +11,7 @@ export default async function TurfOwnerDashboard() {
     ? (
         await supabase
           .from("turfs")
-          .select("id, name, area, price_per_hour, is_active")
+          .select("id, name, area, price_per_hour, is_active, is_approved")
           .in("id", ownedTurfIds)
       ).data ?? []
     : [];
@@ -40,13 +40,19 @@ export default async function TurfOwnerDashboard() {
                 {t.area} · ₹{t.price_per_hour}/hour
               </p>
             </div>
-            <span
-              className={`rounded-pill px-3 py-1 text-xs font-semibold ${
-                t.is_active ? "bg-turf/10 text-turf-deep" : "bg-surface text-ink/50"
-              }`}
-            >
-              {t.is_active ? "Live" : "Hidden"}
-            </span>
+            {!t.is_approved ? (
+              <span className="rounded-pill bg-orange/10 px-3 py-1 text-xs font-semibold text-orange-deep">
+                Approval Pending
+              </span>
+            ) : (
+              <span
+                className={`rounded-pill px-3 py-1 text-xs font-semibold ${
+                  t.is_active ? "bg-turf/10 text-turf-deep" : "bg-surface text-ink/50"
+                }`}
+              >
+                {t.is_active ? "Live" : "Hidden"}
+              </span>
+            )}
           </Link>
         ))}
       </div>

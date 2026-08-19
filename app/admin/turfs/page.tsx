@@ -16,6 +16,7 @@ interface Turf {
   owner_email: string | null;
   owner_phone: string | null;
   is_active: boolean;
+  is_approved: boolean;
 }
 
 export default function TurfsAdminPage() {
@@ -91,6 +92,21 @@ export default function TurfsAdminPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ is_active: !turf.is_active }),
     });
+    load();
+  }
+
+  async function approveTurf(id: string) {
+    await fetch(`/api/admin/turfs/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ is_approved: true }),
+    });
+    load();
+  }
+
+  async function rejectTurf(id: string) {
+    if (!confirm("Reject and delete this submission?")) return;
+    await fetch(`/api/admin/turfs/${id}`, { method: "DELETE" });
     load();
   }
 
@@ -211,12 +227,68 @@ export default function TurfsAdminPage() {
         </button>
       </form>
 
-      <div className="mt-8 grid gap-3">
+      <div className="mt-10 grid gap-3">
         {loading && <p className="text-ink/50">Loading...</p>}
-        {!loading && turfs.length === 0 && (
-          <p className="text-ink/50">Koi turfs nahi hai abhi.</p>
+        {!loading && turfs.filter((t) => !t.is_approved).length > 0 && (
+          <>
+            <h2 className="mb-1 font-display text-xl normal-case tracking-normal text-orange-deep">
+              Approval Ka Wait Kar Rahe Hai
+            </h2>
+            {turfs
+              .filter((t) => !t.is_approved)
+              .map((t) => (
+                <div
+                  key={t.id}
+                  className="rounded-2xl border border-orange/30 bg-orange/5 p-4"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <p className="font-semibold">{t.name}</p>
+                      <p className="text-sm text-ink/60">{t.address}</p>
+                      <p className="mt-1 text-sm text-ink/70">
+                        {t.sport_types.join(", ")} · ₹{t.price_per_hour}/hr ·{" "}
+                        {t.opening_time}–{t.closing_time}
+                      </p>
+                      <p className="text-sm text-ink/50">
+                        Contact: {t.contact_phone}
+                      </p>
+                      {(t.owner_email || t.owner_phone) && (
+                        <p className="mt-1 text-xs text-turf-deep">
+                          Owner login: {t.owner_email || t.owner_phone}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex shrink-0 flex-col items-end gap-2">
+                      <button
+                        onClick={() => approveTurf(t.id)}
+                        className="rounded-pill bg-turf px-3 py-1.5 text-xs font-semibold text-white"
+                      >
+                        Approve
+                      </button>
+                      <button
+                        onClick={() => rejectTurf(t.id)}
+                        className="text-xs font-semibold text-orange-deep hover:underline"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+          </>
         )}
-        {turfs.map((t) => (
+      </div>
+
+      <div className="mt-8 grid gap-3">
+        <h2 className="mb-1 font-display text-xl normal-case tracking-normal">
+          Saare Turfs
+        </h2>
+        {!loading && turfs.filter((t) => t.is_approved).length === 0 && (
+          <p className="text-ink/50">Koi approved turfs nahi hai abhi.</p>
+        )}
+        {turfs
+          .filter((t) => t.is_approved)
+          .map((t) => (
           <div key={t.id} className="rounded-2xl border border-tape p-4">
             <div className="flex items-start justify-between gap-3">
               <div>

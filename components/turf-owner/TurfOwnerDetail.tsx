@@ -10,6 +10,7 @@ interface Turf {
   closing_time: string;
   slot_duration_minutes: number;
   is_active: boolean;
+  is_approved: boolean;
 }
 
 interface Booking {
@@ -64,6 +65,14 @@ export function TurfOwnerDetail({ turf: initialTurf }: { turf: Turf }) {
       <h1 className="font-display text-3xl normal-case tracking-normal">
         {turf.name}
       </h1>
+
+      {!turf.is_approved && (
+        <div className="mt-4 rounded-2xl border border-orange/30 bg-orange/5 p-4 text-sm text-orange-deep">
+          ⏳ Ye turf abhi Malhar Sports team ke approval ka wait kar raha
+          hai. Approve hone ke baad hi customers ko dikhega aur book kar
+          payenge — tab tak tu settings adjust kar sakta hai.
+        </div>
+      )}
 
       <form
         onSubmit={handleSave}

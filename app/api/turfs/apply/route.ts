@@ -1,28 +1,12 @@
 import { NextResponse } from "next/server";
 import { supabase, isSupabaseConfigured } from "@/lib/supabase";
-import { requireAdmin } from "@/lib/require-admin";
-
-export async function GET() {
-  const forbidden = await requireAdmin();
-  if (forbidden) return forbidden;
-  if (!isSupabaseConfigured() || !supabase) {
-    return NextResponse.json([], { status: 200 });
-  }
-
-  const { data, error } = await supabase
-    .from("turfs")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json(data);
-}
 
 export async function POST(req: Request) {
-  const forbidden = await requireAdmin();
-  if (forbidden) return forbidden;
   if (!isSupabaseConfigured() || !supabase) {
-    return NextResponse.json({ error: "Not configured" }, { status: 503 });
+    return NextResponse.json(
+      { error: "Abhi ye feature available nahi hai. WhatsApp karo directly." },
+      { status: 503 }
+    );
   }
 
   const body = await req.json();
@@ -36,14 +20,23 @@ export async function POST(req: Request) {
     opening_time,
     closing_time,
     slot_duration_minutes,
-    image_url,
     owner_email,
     owner_phone,
   } = body;
 
   if (!name || !address || !contact_phone || !price_per_hour) {
     return NextResponse.json(
-      { error: "Name, address, contact phone, and price required" },
+      { error: "Name, address, contact phone, aur price zaroori hai." },
+      { status: 400 }
+    );
+  }
+
+  // Required so the owner can actually log in and manage it afterward —
+  // unlike the admin-created path, self-signup has no other way to link
+  // a turf to whoever submitted it.
+  if (!owner_email && !owner_phone) {
+    return NextResponse.json(
+      { error: "Login ke liye apna email ya phone number zaroor daalo." },
       { status: 400 }
     );
   }
@@ -60,11 +53,10 @@ export async function POST(req: Request) {
       opening_time: opening_time ?? "06:00",
       closing_time: closing_time ?? "23:00",
       slot_duration_minutes: slot_duration_minutes ?? 60,
-      image_url: image_url ?? null,
       owner_email: owner_email ? owner_email.toLowerCase().trim() : null,
       owner_phone: owner_phone ? owner_phone.replace(/\D/g, "") : null,
       is_active: true,
-      is_approved: true, // admin-added directly, no self-approval needed
+      is_approved: false, // stays hidden from customers until admin approves
     })
     .select()
     .single();

@@ -27,6 +27,7 @@ async function getTurfs(): Promise<Turf[]> {
     .from("turfs")
     .select("id, name, address, area, sport_types, price_per_hour, image_url")
     .eq("is_active", true)
+    .eq("is_approved", true)
     .order("name");
   return data ?? [];
 }
@@ -45,6 +46,14 @@ export default async function TurfsPage() {
           <p className="mx-auto mt-3 max-w-md text-center text-ink/70">
             Indore ke turfs — live slots dekho, seedha book karo. Koi
             payment nahi, bas confirm karo aur pahunch jao.
+          </p>
+          <p className="mt-4 text-center">
+            <Link
+              href="/turfs/list-your-turf"
+              className="text-sm font-semibold text-orange hover:underline"
+            >
+              Turf Owner Ho? Apna Turf List Karo →
+            </Link>
           </p>
         </RevealOnScroll>
 

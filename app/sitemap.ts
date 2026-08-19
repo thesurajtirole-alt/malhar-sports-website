@@ -36,7 +36,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { data } = await supabase
       .from("turfs")
       .select("id")
-      .eq("is_active", true);
+      .eq("is_active", true)
+      .eq("is_approved", true);
     turfRoutes = (data ?? []).map((t) => ({
       url: `${business.siteUrl}/turfs/${t.id}`,
       changeFrequency: "weekly" as const,

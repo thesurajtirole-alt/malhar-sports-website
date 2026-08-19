@@ -84,3 +84,21 @@ They can only edit: **price per hour, opening/closing time, and a visible/hidden
 | **Turf owner** | `malharsportsandshoes.in/turf-owner` | Sign in via the same Sign In button, using the exact email/phone you entered for them in `/admin/turfs` |
 
 **Nobody sees a nav link for either `/admin` or `/turf-owner`** — both are unlisted on purpose (per your call not to clutter the navbar for regular customers). You'll need to tell each turf owner their dashboard URL directly (e.g. via WhatsApp when you onboard them) — same as how you'll navigate to `/admin` yourself.
+
+## 9. Public turf self-signup, with your approval required
+
+Turf owners can now list their own turf directly on the site — but it stays completely invisible to customers until you approve it.
+
+### One more SQL step
+Run **`supabase-setup-v4.sql`** (after v1, v2, v3) in Supabase's SQL Editor. Adds an approval flag to turfs — existing turfs you've already added default to approved automatically, so nothing you've set up breaks.
+
+### The flow
+1. A turf owner visits `/turfs/list-your-turf` (there's a link to it right on the `/turfs` page — "Turf Owner Ho? Apna Turf List Karo").
+2. They fill in their turf's details, plus their own email or phone (needed so they can log into `/turf-owner` afterward).
+3. On submit, the turf is created but marked **not approved** — it does not show up on `/turfs`, doesn't show up in the sitemap, and can't actually be booked (checked at the database level, not just hidden in the page — someone can't book it even by guessing the URL).
+4. They can immediately sign in and check `/turf-owner` — they'll see their turf listed with an "Approval Pending" badge.
+5. **You** go to `/admin/turfs` — pending submissions now show in a separate "Approval Ka Wait Kar Rahe Hai" section at the top, with **Approve** and **Reject** buttons.
+6. Click **Approve** → it instantly becomes visible and bookable on `/turfs`. Click **Reject** → it's deleted.
+
+### Turfs you add yourself via `/admin/turfs` skip this entirely
+Anything you add directly through the admin panel (not the public form) is automatically pre-approved — the approval queue is only for public self-submissions, since you already vetted it yourself by adding it.
