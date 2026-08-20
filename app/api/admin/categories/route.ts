@@ -10,9 +10,9 @@ export async function GET() {
   }
 
   const { data, error } = await supabase
-    .from("products")
+    .from("categories")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("name");
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
@@ -26,22 +26,15 @@ export async function POST(req: Request) {
   }
 
   const body = await req.json();
-  const { name, description, category_id, price, image_url } = body;
+  const { name, parent_id } = body;
 
   if (!name) {
     return NextResponse.json({ error: "Name required" }, { status: 400 });
   }
 
   const { data, error } = await supabase
-    .from("products")
-    .insert({
-      name,
-      description: description ?? null,
-      category_id: category_id ?? null,
-      price: price ?? null,
-      image_url: image_url ?? null,
-      is_active: true,
-    })
+    .from("categories")
+    .insert({ name, parent_id: parent_id || null })
     .select()
     .single();
 

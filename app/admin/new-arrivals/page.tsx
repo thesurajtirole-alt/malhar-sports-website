@@ -2,11 +2,17 @@
 
 import { useEffect, useState } from "react";
 
+interface Category {
+  id: string;
+  name: string;
+  parent_id: string | null;
+}
+
 interface Product {
   id: string;
   name: string;
   description: string | null;
-  category: string | null;
+  category_id: string | null;
   price: number | null;
   image_url: string | null;
   is_active: boolean;
@@ -14,13 +20,14 @@ interface Product {
 
 export default function NewArrivalsAdminPage() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [category, setCategory] = useState("");
+  const [categoryId, setCategoryId] = useState("");
   const [price, setPrice] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
@@ -32,11 +39,19 @@ export default function NewArrivalsAdminPage() {
       .finally(() => setLoading(false));
   }
 
-  // Standard data-fetch-on-mount pattern — loading state starts true,
-  // this call flips it via the fetch, same category as other legitimate
-  // effect-based external-sync calls elsewhere in this codebase.
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(loadProducts, []);
+  function loadCategories() {
+    fetch("/api/admin/categories")
+      .then((r) => r.json())
+      .then((data) => setCategories(Array.isArray(data) ? data : []));
+  }
+
+  // Standard data-fetch-on-mount pattern — same category as other
+  // legitimate effect-based loading elsewhere in this codebase.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    loadProducts();
+    loadCategories();
+  }, []);
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -69,7 +84,7 @@ export default function NewArrivalsAdminPage() {
       body: JSON.stringify({
         name,
         description: description || undefined,
-        category: category || undefined,
+        category_id: categoryId || undefined,
         price: price ? Number(price) : undefined,
         image_url: imageUrl || undefined,
       }),
@@ -81,7 +96,7 @@ export default function NewArrivalsAdminPage() {
     }
     setName("");
     setDescription("");
-    setCategory("");
+    setCategoryId("");
     setPrice("");
     setImageUrl("");
     loadProducts();
@@ -102,6 +117,23 @@ export default function NewArrivalsAdminPage() {
     loadProducts();
   }
 
+  function categoryLabel(id: string | null) {
+    if (!id) return null;
+    const cat = categories.find((c) => c.id === id);
+    if (!cat) return null;
+    if (!cat.parent_id) return cat.name;
+    const parent = categories.find((c) => c.id === cat.parent_id);
+    return parent ? `${parent.name} → ${cat.name}` : cat.name;
+  }
+
+  // Build a flat, indented option list: top-level categories, each
+  // followed by their subcategories.
+  const topLevel = categories.filter((c) => !c.parent_id);
+  const categoryOptions = topLevel.flatMap((top) => [
+    top,
+    ...categories.filter((c) => c.parent_id === top.id),
+  ]);
+
   return (
     <div>
       <h1 className="font-display text-3xl normal-case tracking-normal">
@@ -110,6 +142,16 @@ export default function NewArrivalsAdminPage() {
       <p className="mt-1 text-ink/60">
         Homepage pe dikhne wale naye products yaha manage karo.
       </p>
+
+      {categories.length === 0 && (
+        <p className="mt-3 rounded-xl bg-surface p-3 text-sm text-ink/60">
+          Abhi koi category nahi hai —{" "}
+          <a href="/admin/categories" className="font-semibold text-orange hover:underline">
+            pehle categories banao
+          </a>
+          , phir yaha products add karo.
+        </p>
+      )}
 
       <form
         onSubmit={handleAdd}
@@ -122,17 +164,23 @@ export default function NewArrivalsAdminPage() {
           required
           className="rounded-xl border border-tape px-4 py-2.5 text-sm outline-none focus:border-orange sm:col-span-2"
         />
-        <input
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          placeholder="Category (e.g. Cricket, Running)"
+        <select
+          value={categoryId}
+          onChange={(e) => setCategoryId(e.target.value)}
           className="rounded-xl border border-tape px-4 py-2.5 text-sm outline-none focus:border-orange"
-        />
+        >
+          <option value="">Category (optional)</option>
+          {categoryOptions.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.parent_id ? `— ${c.name}` : c.name}
+            </option>
+          ))}
+        </select>
         <input
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           type="number"
-          placeholder="Price (₹, optional)"
+          placeholder="Starting price (₹, optional)"
           className="rounded-xl border border-tape px-4 py-2.5 text-sm outline-none focus:border-orange"
         />
         <textarea
@@ -195,7 +243,8 @@ export default function NewArrivalsAdminPage() {
             <div className="flex-1">
               <p className="font-semibold">{p.name}</p>
               <p className="text-sm text-ink/60">
-                {p.category} {p.price ? `· ₹${p.price}` : ""}
+                {categoryLabel(p.category_id)}
+                {p.price ? ` · Starting from ₹${p.price}` : ""}
               </p>
             </div>
             <button

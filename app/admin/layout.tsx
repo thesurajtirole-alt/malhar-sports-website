@@ -6,6 +6,7 @@ import { AuthButton } from "@/components/auth/AuthButton";
 const adminLinks = [
   { href: "/admin", label: "Dashboard" },
   { href: "/admin/new-arrivals", label: "New Arrivals" },
+  { href: "/admin/categories", label: "Categories" },
   { href: "/admin/academies", label: "Academies" },
   { href: "/admin/turfs", label: "Turfs" },
   { href: "/admin/bookings", label: "Bookings" },

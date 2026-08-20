@@ -102,3 +102,21 @@ Run **`supabase-setup-v4.sql`** (after v1, v2, v3) in Supabase's SQL Editor. Add
 
 ### Turfs you add yourself via `/admin/turfs` skip this entirely
 Anything you add directly through the admin panel (not the public form) is automatically pre-approved — the approval queue is only for public self-submissions, since you already vetted it yourself by adding it.
+
+## 10. Real categories/subcategories for New Arrivals
+
+Products no longer use free-typed category text — you manage a real category list, and products pick from it via a dropdown.
+
+### One more SQL step
+Run **`supabase-setup-v5.sql`** (after v1-v4) in Supabase's SQL Editor. Creates a `categories` table and links `products` to it.
+
+### How to use it
+1. Go to **`/admin/categories`**.
+2. Add a top-level category (e.g. "Cricket", "Running Shoes", "Apparel") — leave the dropdown on "Top-level category."
+3. To add a subcategory (e.g. "Cricket Bats" under "Cricket"), add a new category, and this time pick "Subcategory under: Cricket" from the dropdown.
+4. Go to **`/admin/new-arrivals`** — the category field is now a dropdown showing your real categories, with subcategories indented under their parent.
+
+Deleting a top-level category also deletes its subcategories (you'll get a warning before this happens). Deleting a category a product is currently using doesn't delete the product — it just becomes uncategorized.
+
+### Pricing now reads "Starting from"
+Every place a product's price shows (homepage New Arrivals, admin list) now displays as **"Starting from ₹X"** instead of just "₹X" — since a single listed price is really a floor (sizes/variants vary), not a fixed price. This is just a label change, not a new field — you still enter one number per product.

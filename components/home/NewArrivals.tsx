@@ -6,20 +6,20 @@ interface Product {
   id: string;
   name: string;
   description: string | null;
-  category: string | null;
   price: number | null;
   image_url: string | null;
+  categories: { name: string } | null;
 }
 
 async function getNewArrivals(): Promise<Product[]> {
   if (!isSupabaseConfigured() || !supabase) return [];
   const { data } = await supabase
     .from("products")
-    .select("id, name, description, category, price, image_url")
+    .select("id, name, description, price, image_url, categories(name)")
     .eq("is_active", true)
     .order("created_at", { ascending: false })
     .limit(4);
-  return data ?? [];
+  return (data as unknown as Product[]) ?? [];
 }
 
 export async function NewArrivals() {
@@ -55,12 +55,12 @@ export async function NewArrivals() {
                 </div>
                 <div className="p-4">
                   <p className="font-semibold">{p.name}</p>
-                  {p.category && (
-                    <p className="text-xs text-ink/50">{p.category}</p>
+                  {p.categories?.name && (
+                    <p className="text-xs text-ink/50">{p.categories.name}</p>
                   )}
                   {p.price && (
                     <p className="mt-1 text-sm font-semibold text-orange">
-                      ₹{p.price}
+                      Starting from ₹{p.price}
                     </p>
                   )}
                 </div>

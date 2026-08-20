@@ -8,6 +8,12 @@ const cards = [
     desc: "Homepage pe dikhne wale naye products manage karo.",
   },
   {
+    href: "/admin/categories",
+    emoji: "🗂️",
+    title: "Categories",
+    desc: "Products ke liye categories aur subcategories banao.",
+  },
+  {
     href: "/admin/academies",
     emoji: "🏟️",
     title: "Indore Directory",
