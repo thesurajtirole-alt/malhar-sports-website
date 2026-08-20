@@ -42,7 +42,7 @@ export function BmiCalculator() {
 
       {heightCm > 0 && weightKg > 0 && (
         <div className="mt-8 rounded-2xl bg-surface p-6 text-center">
-          <p className="text-sm font-medium text-ink/60">Tera BMI</p>
+          <p className="text-sm font-medium text-ink/60">Tumhara BMI</p>
           <p className="mt-1 font-display text-4xl">{bmi.toFixed(1)}</p>
           <p className={`mt-2 font-semibold ${category.color}`}>
             {category.label}

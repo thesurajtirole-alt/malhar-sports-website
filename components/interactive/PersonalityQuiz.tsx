@@ -51,7 +51,7 @@ export function PersonalityQuiz() {
       >
         <span className="text-5xl">{result.emoji}</span>
         <p className="mt-3 text-sm font-semibold uppercase tracking-wide text-orange">
-          Tera Result
+          Tumhara Result
         </p>
         <h2 className="mt-2 font-display text-3xl md:text-4xl">
           {result.title}
@@ -78,7 +78,7 @@ export function PersonalityQuiz() {
           </button>
           <a
             href={`${business.whatsappLink}?text=${encodeURIComponent(
-              `Main "${result.title}" nikla Malhar Sports ke quiz mein! Tu bhi try kar.`
+              `Main "${result.title}" nikla Malhar Sports ke quiz mein! Tum bhi try karo.`
             )}`}
             target="_blank"
             rel="noopener noreferrer"

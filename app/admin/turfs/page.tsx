@@ -122,7 +122,7 @@ export default function TurfsAdminPage() {
         Turfs
       </h1>
       <p className="mt-1 text-ink/60">
-        Booking ke liye turfs add karo — ye tere apne nahi, doosro ke turfs hai jo tu list kar raha hai.
+        Booking ke liye turfs add karo — ye tumhare apne nahi, doosro ke turfs hai jo tum list kar rahe ho.
       </p>
 
       <form

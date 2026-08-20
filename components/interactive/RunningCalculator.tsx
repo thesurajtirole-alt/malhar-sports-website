@@ -23,7 +23,7 @@ export function RunningCalculator() {
     <div className="rounded-card border border-tape p-8 md:p-12">
       <label className="block">
         <span className="text-sm font-medium text-ink/70">
-          Tera pace (minutes per km)
+          Tumhara pace (minutes per km)
         </span>
         <input
           type="range"

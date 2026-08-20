@@ -153,7 +153,7 @@ export function AuthButton() {
               </button>
             </div>
             <p className="mt-2 text-sm text-ink/60">
-              Sign in karo taaki tera streak, points aur badges kisi bhi
+              Sign in karo taaki tumhara streak, points aur badges kisi bhi
               device pe safe rahe.
             </p>
 

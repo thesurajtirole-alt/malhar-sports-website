@@ -14,11 +14,11 @@ export function PersonalityTeaser() {
                 2-Minute Quiz
               </p>
               <h2 className="font-display text-3xl leading-tight md:text-4xl">
-                Tu Kaunsa Sports Player Hai?
+                Tum Kaunsa Sports Player Ho?
               </h2>
               <p className="mt-3 max-w-md text-ink/70">
                 Weekend Warrior? Daily Grinder? Ya bas gym ke naam pe selfie
-                leta hai? 4 sawaal, aur pata chal jayega tera sports avatar.
+                leta hai? 4 sawaal, aur pata chal jayega tumhara sports avatar.
               </p>
               <Link
                 href="/khelo/sports-personality"

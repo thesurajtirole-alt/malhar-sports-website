@@ -42,8 +42,8 @@ export default function AboutPage() {
               sirf saman nahi milta, sahi salaah bhi milti hai.
             </p>
             <p>
-              Chahe tu apna pehla cricket kit khareed raha ho, ya running shoes
-              jo tere pronation ke hisaab se fit ho — hum samajhte hai ki sahi
+              Chahe tum apna pehla cricket kit khareed rahe ho, ya running shoes
+              jo tumhare pronation ke hisaab se fit ho — hum samajhte hai ki sahi
               gear se farak padta hai. Isliye har customer se time lekar baat
               karte hai, sirf bechne ke liye nahi.
             </p>
@@ -53,7 +53,7 @@ export default function AboutPage() {
               ka trust humne saalon mein banaya hai — ek customer ek time pe.
             </p>
             <p>
-              Ye website bhi isi soch ka extension hai — jaha aake tu sirf
+              Ye website bhi isi soch ka extension hai — jaha aake tum sirf
               shopping nahi, kuch seekh bhi sake, khel bhi sake.
             </p>
           </div>

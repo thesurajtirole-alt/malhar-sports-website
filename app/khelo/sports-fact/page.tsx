@@ -5,7 +5,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 
 export const metadata: Metadata = {
   title: "Sports Fact of the Day",
-  description: "Roz ek naya sports fact — jo tu apne dost ko bhi bolega.",
+  description: "Roz ek naya sports fact — jo tum apne dost ko bhi bologe.",
   alternates: { canonical: "/khelo/sports-fact" },
 };
 

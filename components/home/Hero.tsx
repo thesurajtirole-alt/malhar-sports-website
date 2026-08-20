@@ -125,7 +125,7 @@ export function Hero() {
               rel="noopener noreferrer"
               data-cursor="Explore →"
               onClick={() => trackEvent("whatsapp_click", { source: "hero_cta" })}
-              className="inline-block rounded-pill bg-turf px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-turf/20"
+              className="inline-block rounded-pill bg-turf px-8 py-4 text-base font-semibold text-white shadow-lg shadow-turf/20"
             >
               Confuse Ho? Pucho Na 😄
             </a>
@@ -136,9 +136,9 @@ export function Hero() {
             rel="noopener noreferrer"
             data-cursor="Explore →"
             onClick={() => trackEvent("directions_click", { source: "hero_cta" })}
-            className="rounded-pill border border-white/20 px-6 py-3 text-sm font-semibold text-paper hover:bg-white/10"
+            className="inline-flex items-center px-2 py-4 text-sm font-semibold text-paper/70 underline decoration-white/30 underline-offset-4 hover:text-paper"
           >
-            Dukaan Ka Raasta Dikhao
+            Dukaan Ka Raasta Dikhao →
           </a>
         </motion.div>
       </div>

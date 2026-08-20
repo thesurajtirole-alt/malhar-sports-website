@@ -77,7 +77,7 @@ export const personalityResults: Record<PersonalityKey, PersonalityResult> = {
     title: "Weekend Warrior",
     emoji: "🎯",
     description:
-      "Hafte ke 5 din grind, 2 din ground pe full masti. Tera sport calendar Saturday-Sunday ke around ghoomta hai — aur usme kuch galat nahi hai.",
+      "Hafte ke 5 din grind, 2 din ground pe full masti. Tumhara sport calendar Saturday-Sunday ke around ghoomta hai — aur usme kuch galat nahi hai.",
     badge: "weekend-warrior",
   },
   "daily-grinder": {
@@ -85,7 +85,7 @@ export const personalityResults: Record<PersonalityKey, PersonalityResult> = {
     title: "Daily Grinder",
     emoji: "🔥",
     description:
-      "Tu roz practice karta/karti hai, chahe mood ho ya na ho. Consistency tera superpower hai — coaches isi type ko pasand karte hai.",
+      "Tum roz practice karte/karti ho, chahe mood ho ya na ho. Consistency tumhara superpower hai — coaches isi type ko pasand karte hai.",
     badge: "sports-guru",
   },
   "school-star": {
@@ -93,7 +93,7 @@ export const personalityResults: Record<PersonalityKey, PersonalityResult> = {
     title: "School Sports Star",
     emoji: "🎒",
     description:
-      "Annual sports day tera Diwali hai. House team, PT period, tournament season — sab mein full energy se involved rehta/rehti hai.",
+      "Annual sports day tumhara Diwali hai. House team, PT period, tournament season — sab mein full energy se involved rehta/rehti hai.",
     badge: "explorer",
   },
   "fitness-first": {
@@ -101,7 +101,7 @@ export const personalityResults: Record<PersonalityKey, PersonalityResult> = {
     title: "Fitness First",
     emoji: "🏋️",
     description:
-      "Sport tere liye ek tool hai fit rehne ka. Gym, running, ya koi bhi activity — goal hamesha better health hota hai.",
+      "Sport tumhare liye ek tool hai fit rehne ka. Gym, running, ya koi bhi activity — goal hamesha better health hota hai.",
     badge: "runner",
   },
 };

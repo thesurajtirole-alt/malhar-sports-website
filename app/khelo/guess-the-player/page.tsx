@@ -6,7 +6,7 @@ import { RevealOnScroll } from "@/components/ui/RevealOnScroll";
 export const metadata: Metadata = {
   title: "Guess The Player — Aaj Ka Sports Star Kaun Hai?",
   description:
-    "3 clues, ek player. Kya tu bata sakta hai ye sports legend kaun hai? Roz naya player, roz naya challenge.",
+    "3 clues, ek player. Kya tum bata sakte ho ye sports legend kaun hai? Roz naya player, roz naya challenge.",
   alternates: { canonical: "/khelo/guess-the-player" },
 };
 

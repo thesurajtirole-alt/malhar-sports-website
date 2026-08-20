@@ -298,3 +298,17 @@ Per request, swapped the storage backend from Redis to Supabase (Postgres). Both
 **5. Redeploy** — Deployments tab → ⋯ on latest → Redeploy.
 
 **6. Test** — Sign Up with a phone number + password on your live site. If it works, check Supabase's **Table Editor** → `auth_users` — you should see your new row appear there.
+
+## UX pass: homepage flow + tone
+
+### Homepage restructure
+Reordered around a clear hierarchy instead of throwing everything at the visitor at once:
+1. **Hero** — value prop + one visually dominant primary CTA (WhatsApp), secondary "get directions" demoted to a plain text link instead of competing as an equal-weight button.
+2. **`components/home/WhatYouCanDoHere.tsx`** (new) — a 4-tile visual sitemap right after the hero: Shop, Turf Booking, Khelo, Guides. Directly answers "what can I do here," which was the core complaint driving this pass.
+3. **Trust** (Matchday Ticker, Store Gallery) — credibility before asking for more engagement.
+4. **Secondary discovery** (New Arrivals, Quiz, Daily Challenge) — pushed further down, presented as optional exploration rather than competing with the primary path.
+
+### Tone: "tu" → "tum", site-wide
+Went through every file containing informal "tu/tera/teri/tere/tujhe/tune" and corrected both the pronoun and the verb conjugation it required (e.g. "tu karta hai" → "tum karte ho", not just a word swap) — 22 files: homepage components, all game/quiz pages, calculators, auth, turf-owner pages, admin turf page, about page, and all 6 blog articles. Verified zero remaining instances via a full-codebase search after the pass, not just spot-checked.
+
+**Why this mattered:** "तू" is one of Hindi's most intimate registers — appropriate between close friends, inappropriate from a business addressing strangers, and genuinely risks reading as disrespectful to older customers, women, or anyone the site hasn't earned that familiarity with yet. "तुम" keeps the same energetic, non-corporate personality without that risk.

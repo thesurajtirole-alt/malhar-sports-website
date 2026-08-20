@@ -15,7 +15,7 @@ const games = [
     href: "/khelo/sports-personality",
     emoji: "🧠",
     title: "Sports Personality Quiz",
-    desc: "Tu Weekend Warrior hai ya Daily Grinder? 4 sawaal, pata chal jayega.",
+    desc: "Tum Weekend Warrior ho ya Daily Grinder? 4 sawaal, pata chal jayega.",
   },
   {
     href: "/khelo/aaj-ka-challenge",
@@ -33,7 +33,7 @@ const games = [
     href: "/khelo/sports-fact",
     emoji: "💡",
     title: "Sports Fact of the Day",
-    desc: "Ek fact jo tu apne dost ko bhi bolega.",
+    desc: "Ek fact jo tum apne dost ko bhi bologe.",
   },
 ];
 

@@ -19,7 +19,7 @@ const cards = [
     href: "/khelo/sports-fact",
     emoji: "💡",
     title: "Sports Fact of the Day",
-    desc: "Ek fact jo tu apne dost ko bhi bolega.",
+    desc: "Ek fact jo tum apne dost ko bhi bologe.",
   },
 ];
 

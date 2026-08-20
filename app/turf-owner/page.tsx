@@ -19,7 +19,7 @@ export default async function TurfOwnerDashboard() {
   return (
     <div>
       <h1 className="font-display text-3xl normal-case tracking-normal">
-        Tera Turf Dashboard
+        Tumhara Turf Dashboard
       </h1>
       <p className="mt-1 text-ink/60">
         {turfs.length === 1

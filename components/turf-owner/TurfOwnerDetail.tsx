@@ -70,7 +70,7 @@ export function TurfOwnerDetail({ turf: initialTurf }: { turf: Turf }) {
         <div className="mt-4 rounded-2xl border border-orange/30 bg-orange/5 p-4 text-sm text-orange-deep">
           ⏳ Ye turf abhi Malhar Sports team ke approval ka wait kar raha
           hai. Approve hone ke baad hi customers ko dikhega aur book kar
-          payenge — tab tak tu settings adjust kar sakta hai.
+          payenge — tab tak tum settings adjust kar sakte ho.
         </div>
       )}
 

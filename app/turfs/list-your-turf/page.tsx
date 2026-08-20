@@ -65,12 +65,12 @@ export default function ListYourTurfPage() {
             Submit Ho Gaya!
           </h1>
           <p className="mt-3 text-ink/70">
-            Tera turf review ke liye submit ho gaya hai. Malhar Sports team
+            Tumhara turf review ke liye submit ho gaya hai. Malhar Sports team
             check karke approve karegi — usके baad customers ko dikhna shuru
             ho jayega.
           </p>
           <p className="mt-4 text-sm text-ink/60">
-            Abhi bhi tu apna dashboard access kar sakta hai — jis email/phone
+            Abhi bhi tum apna dashboard access kar sakte ho — jis email/phone
             se sign in kiya tha, wahi se{" "}
             <code className="rounded bg-surface px-1.5 py-0.5">
               /turf-owner
@@ -165,10 +165,10 @@ export default function ListYourTurfPage() {
 
             <div className="sm:col-span-2">
               <p className="mb-2 mt-2 text-sm font-semibold text-ink">
-                Tera Login (dashboard access ke liye)
+                Tumhara Login (dashboard access ke liye)
               </p>
               <p className="mb-2 text-xs text-ink/50">
-                Ye tera email ya phone hoga jisse tu apna dashboard{" "}
+                Ye tumhara email ya phone hoga jisse tum apna dashboard{" "}
                 <code>/turf-owner</code> pe login karega — bookings dekhne
                 aur price/timing badalne ke liye. Kam se kam ek zaroor bharo.
               </p>
@@ -176,14 +176,14 @@ export default function ListYourTurfPage() {
             <input
               value={ownerEmail}
               onChange={(e) => setOwnerEmail(e.target.value)}
-              placeholder="Tera Google email"
+              placeholder="Tumhara Google email"
               type="email"
               className="rounded-xl border border-tape px-4 py-2.5 text-sm outline-none focus:border-orange"
             />
             <input
               value={ownerPhone}
               onChange={(e) => setOwnerPhone(e.target.value)}
-              placeholder="Ya tera phone number"
+              placeholder="Ya tumhara phone number"
               className="rounded-xl border border-tape px-4 py-2.5 text-sm outline-none focus:border-orange"
             />
 
