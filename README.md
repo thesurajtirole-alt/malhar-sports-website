@@ -312,3 +312,9 @@ Reordered around a clear hierarchy instead of throwing everything at the visitor
 Went through every file containing informal "tu/tera/teri/tere/tujhe/tune" and corrected both the pronoun and the verb conjugation it required (e.g. "tu karta hai" → "tum karte ho", not just a word swap) — 22 files: homepage components, all game/quiz pages, calculators, auth, turf-owner pages, admin turf page, about page, and all 6 blog articles. Verified zero remaining instances via a full-codebase search after the pass, not just spot-checked.
 
 **Why this mattered:** "तू" is one of Hindi's most intimate registers — appropriate between close friends, inappropriate from a business addressing strangers, and genuinely risks reading as disrespectful to older customers, women, or anyone the site hasn't earned that familiarity with yet. "तुम" keeps the same energetic, non-corporate personality without that risk.
+
+## Bugfix — New Arrivals not showing on homepage despite an active product
+
+**Real bug, my mistake:** `components/home/NewArrivals.tsx` used a Supabase relational-embed query (`categories(name)`) to pull the category name in one query. That syntax depends on Supabase's API layer already recognizing the `products → categories` foreign key — which can lag right after a migration adds a new relationship (exactly the situation right after running `supabase-setup-v5.sql`). Worse, the code only read `data` from the response and never checked `error`, so when the embed failed, it failed **completely silently** — no error anywhere, the section just never rendered.
+
+**Fixed** by switching to two plain, independent queries (fetch products, fetch categories, join them in JavaScript) instead of relying on the embed — this has no dependency on API-layer relationship caching. Also added `console.error` logging on both queries, so if something like this happens again, it'll show up in Vercel's function logs instead of failing invisibly.
